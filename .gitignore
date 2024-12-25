@@ -1,0 +1,3 @@
+*.properties
+/BackEnd/.metadata/
+/FrontEnd/diem_danh/node_modules
