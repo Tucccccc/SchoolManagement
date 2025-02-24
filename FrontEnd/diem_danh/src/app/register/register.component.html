@@ -1,40 +1,27 @@
-<form action="">
-    <div class="row g-3 align-items-center">
-        <div class="col-2">
-        <label for="inputUserName" class="col-form-label">Username: </label>
-        </div>
-        <div class="col-4">
-        <input type="text" id="inputUserName" class="form-control" aria-describedby="passwordHelpInline">
-        </div>
+<div class="container">
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  <h2>Registration</h2>
+  <form (submit)="handleSubmit()">
+    <div class="form-group">
+      <label>Name:</label>
+      <input type="text" name="name" [(ngModel)]="formData.strUsername" required />
     </div>
-    <br>
-    <div class="row g-3 align-items-center">
-        <div class="col-2">
-        <label for="inputPassword" class="col-form-label">Password: </label>
-        </div>
-        <div class="col-4">
-        <input type="password" id="inputPassword" class="form-control" aria-describedby="passwordHelpInline">
-        </div>
+    <div class="form-group">
+      <label>Password:</label>
+      <input type="password" name="password" [(ngModel)]="formData.strPassword" required />
     </div>
-    <br>
-    <div class="row g-3 align-items-center">
-        <div class="col-2">
-        <label for="inputPasswordRepeat" class="col-form-label">Repeat Password: </label>
-        </div>
-        <div class="col-4">
-        <input type="password" id="inputPasswordRepeat" class="form-control" aria-describedby="passwordHelpInline">
-        </div>
+    <div class="form-group">
+      <label>Role:</label>
+      <select name="role" [(ngModel)]="formData.strRole" required>
+        <option value="">Select Role</option>
+        <option value="ADMIN">ADMIN</option>
+        <option value="USER">USER</option>
+      </select>
     </div>
-    <br>
-    <button type="button" class="btn btn-primary">Register</button>
-</form>
-
-<div style="text-align:center"class="container">
-    <h1>
-      Welcome {{title}}!
-    </h1>
-    <div class="container">
-      <p>Id: <span>{{greeting.id}}</span></p>
-      <p>Message: <span>{{greeting.content}}!</span></p>
+    <div class="form-group">
+      <label>City:</label>
+      <input type="text" name="city" [(ngModel)]="formData.strCity" />
     </div>
-  </div>
+    <button type="submit">Register</button>
+  </form>
+</div>

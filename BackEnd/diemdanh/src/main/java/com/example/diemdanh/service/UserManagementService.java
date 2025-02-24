@@ -1,12 +1,8 @@
 package com.example.diemdanh.service;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,17 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.diemdanh.dto.ReqResUser;
-import com.example.diemdanh.entity.Role;
 import com.example.diemdanh.entity.User;
-import com.example.diemdanh.repository.RoleRepository;
 import com.example.diemdanh.repository.UserRepository;
 
 @Service
 public class UserManagementService {
 	@Autowired
 	private UserRepository userRepository;
-	@Autowired
-	private RoleRepository roleRepository;
 	@Autowired
 	private JWTUtils jwtUtils;
 	@Autowired
@@ -40,13 +32,11 @@ public class UserManagementService {
 		try {
 			User user = new User();
 			// Get role with ID 1
-			Optional<Role> opRoles = roleRepository.findById(1L);
-			Set<Role> resultSet = opRoles.map(Stream::of).orElseGet(Stream::empty).collect(Collectors.toSet());
 			user.setUsername(registrationRequest.getStrUsername());
-//			user.setRole("ADMIN");
-			user.setRoles(resultSet);
+			user.setRole("USER");
 			user.setEnabled(true);
 			user.setPassword(passwordEncoder.encode(registrationRequest.getStrPassword()));
+			user.setCity(registrationRequest.getStrCity());
 			User userResult = userRepository.save(user);
 			if (userResult.getId() > 0) {
 				resp.setUser(userResult);
@@ -68,20 +58,14 @@ public class UserManagementService {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUsername(),
 					loginRequest.getStrPassword()));
-			Set<String> setRoles = new HashSet<>();
 			var user = userRepository.findByUsername(loginRequest.getStrUsername()).orElseThrow();
 			var jwt = jwtUtils.generateToken(user);
 			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
-			if(user.getRoles().size() > 0) {
-				user.getRoles().forEach(roleElement -> {
-					setRoles.add(roleElement.getName().toString());
-				});
-			}
 			response.setIntStatusCode(200);
 			response.setStrToken(jwt);
 			response.setStrRefreshToken(refreshToken);
 			response.setStrExpirationTime("24Hrs");
-			response.setStrRoles(setRoles);
+			response.setStrRole(user.getRole());
 			response.setStrMsg("Successfully Logged In");
 
 		} catch (Exception e) {
@@ -180,10 +164,13 @@ public class UserManagementService {
 			Optional<User> optUser = userRepository.findById(id);
 			if(optUser.isPresent()) {
 				User user = optUser.get();
+				user.setUsername(userUpdate.getUsername());
+				user.setCity(userUpdate.getCity());
 
-				//  Update password
+				 // Check if password is present in the request
 				if(userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty()) {
-					user.setPassword(userUpdate.getPassword());
+					// Encode the password and update it
+					user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
 				}
 				
 				User userSave = userRepository.save(user);

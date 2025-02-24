@@ -9,5 +9,4 @@ public class DiemdanhApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DiemdanhApplication.class, args);
 	}
-
 }

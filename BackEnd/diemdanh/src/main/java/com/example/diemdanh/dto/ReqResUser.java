@@ -1,7 +1,6 @@
 package com.example.diemdanh.dto;
 
 import java.util.List;
-import java.util.Set;
 
 import com.example.diemdanh.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,11 +19,12 @@ public class ReqResUser {
 	private String strExpirationTime;
 	private User user;
 	private List<User> lstUser;
-	private Set<String> strRoles;
-
+	private String strRole;
+	private String strCity;
+	
 	public ReqResUser(int intStatusCode, String strError, String strMsg, String strToken, String strRefreshToken,
 			String strPassword, String strUsername, String strExpirationTime, User user, List<User> lstUser,
-			Set<String> strRoles) {
+			String strRole, String strCity) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strError = strError;
@@ -36,7 +36,8 @@ public class ReqResUser {
 		this.strExpirationTime = strExpirationTime;
 		this.user = user;
 		this.lstUser = lstUser;
-		this.strRoles = strRoles;
+		this.strRole = strRole;
+		this.strCity = strCity;
 	}
 
 	public ReqResUser() {
@@ -100,6 +101,14 @@ public class ReqResUser {
 		this.strUsername = strUsername;
 	}
 
+	public String getStrExpirationTime() {
+		return strExpirationTime;
+	}
+
+	public void setStrExpirationTime(String strExpirationTime) {
+		this.strExpirationTime = strExpirationTime;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -116,19 +125,19 @@ public class ReqResUser {
 		this.lstUser = lstUser;
 	}
 
-	public String getStrExpirationTime() {
-		return strExpirationTime;
+	public String getStrRole() {
+		return strRole;
 	}
 
-	public void setStrExpirationTime(String strExpirationTime) {
-		this.strExpirationTime = strExpirationTime;
+	public void setStrRole(String strRole) {
+		this.strRole = strRole;
 	}
 
-	public Set<String> getStrRoles() {
-		return strRoles;
+	public String getStrCity() {
+		return strCity;
 	}
 
-	public void setStrRoles(Set<String> strRoles) {
-		this.strRoles = strRoles;
+	public void setStrCity(String strCity) {
+		this.strCity = strCity;
 	}
 }

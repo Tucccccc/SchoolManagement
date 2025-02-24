@@ -22,11 +22,11 @@ export class UpdateUserComponent implements OnInit{
   ){}
 
   userId: any;
-  userData: any;
+  userData: any = {};
   errorMessage:string = '';
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.getUserByID();
   }
 
   // ------------- Get ID from profile -------------
@@ -41,15 +41,32 @@ export class UpdateUserComponent implements OnInit{
 
     try {
       let userDataResponse = await this.userService.getUserByID(this.userId, token);
-      const {username, roles} = userDataResponse.user;
-      this.userData = {username, roles};
+      const {username, role, city} = userDataResponse.user;
+      
+      this.userData = {username, role, city};
     } catch(error:any) {
       this.showError(error);
     }
   }
 
   async updateUser() {
-    const confirmDialog = confirm("Are you sure you wanna update this user")
+    try {
+      const token = localStorage.getItem('token');
+      if(!token) {
+        throw new Error("Token not found");
+      }
+      console.log(this.userData);
+      const res = await this.userService.updateUserByID(this.userId, this.userData, token);
+      console.log(res)
+
+      if(res.intStatusCode == 200){
+        this.router.navigate(['/users'])
+      }else{
+        this.showError(res.message)
+      }
+    } catch(error:any) {
+      this.showError(error.message);
+    }
   }
 
   showError(message:string) {

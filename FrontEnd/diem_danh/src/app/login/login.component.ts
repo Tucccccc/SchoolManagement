@@ -34,7 +34,7 @@ export class LoginComponent {
       console.log(response);
       if(response.intStatusCode == 200) {
         localStorage.setItem('token', response.strToken)
-        localStorage.setItem('role', response.strRoles)
+        localStorage.setItem('role', response.strRole)
         this.router.navigate(['/profile'])
       } else {
         this.showError(response.strError);

@@ -60,6 +60,23 @@ export class UserService {
     }
   }
 
+  async getAllUsers(token:string):Promise<any> {
+    const url = `${this.BASE_URL}/admin/get-all-users`;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    })
+    try {
+      // const response = this.http.post<any>(url, {headers}).toPromise();
+      const response = await firstValueFrom(
+        this.http.get<any>(url, {headers})
+      );
+      return response;
+    } catch(error) {
+      console.log("Get all users failed: ", error);
+      throw error;
+    }
+  }
+
   async getUserByID(userId:string, token:string):Promise<any> {
     const url = `${this.BASE_URL}/admin/get-user/${userId}`;
     const headers = new HttpHeaders({
