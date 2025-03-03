@@ -13,9 +13,8 @@ export class UserService {
   constructor(private http:HttpClient) { }
 
   async login(strUsername:string, strPassword:string):Promise<any> {
-    const url = `${this.BASE_URL}/auth/login`;
+    const url = `${this.BASE_URL}/v1/auth/login`;
     try {
-      // const response = this.http.post<any>(url, {email, password}).toPromise();
       const response = await firstValueFrom(
         this.http.post<any>(url, {strUsername, strPassword})
       );
@@ -27,12 +26,11 @@ export class UserService {
   }
 
   async register(userData:any, token:string):Promise<any> {
-    const url = `${this.BASE_URL}/auth/register`;
+    const url = `${this.BASE_URL}/v1/auth/register`;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     })
     try {
-      // const response = this.http.post<any>(url, {email, password}).toPromise();
       const response = await firstValueFrom(
         this.http.post<any>(url, userData, {headers})
       );
@@ -44,12 +42,11 @@ export class UserService {
   }
 
   async getUserProfile(token:string):Promise<any> {
-    const url = `${this.BASE_URL}/adminuser/get-profile`;
+    const url = `${this.BASE_URL}/v1/adminuser/get-profile`;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     })
     try {
-      // const response = this.http.post<any>(url, {headers}).toPromise();
       const response = await firstValueFrom(
         this.http.get<any>(url, {headers})
       );
@@ -61,12 +58,11 @@ export class UserService {
   }
 
   async getAllUsers(token:string):Promise<any> {
-    const url = `${this.BASE_URL}/admin/get-all-users`;
+    const url = `${this.BASE_URL}/v1/admin/get-all-users`;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     })
     try {
-      // const response = this.http.post<any>(url, {headers}).toPromise();
       const response = await firstValueFrom(
         this.http.get<any>(url, {headers})
       );
@@ -78,12 +74,11 @@ export class UserService {
   }
 
   async getUserByID(userId:string, token:string):Promise<any> {
-    const url = `${this.BASE_URL}/admin/get-user/${userId}`;
+    const url = `${this.BASE_URL}/v1/admin/get-user/${userId}`;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     })
     try {
-      // const response = this.http.post<any>(url, {email, password}).toPromise();
       const response = await firstValueFrom(
         this.http.get<any>(url, {headers})
       );
@@ -95,12 +90,11 @@ export class UserService {
   }
 
   async deleteUserByID(userId:string, token:string):Promise<any> {
-    const url = `${this.BASE_URL}/admin/delete-user/${userId}`;
+    const url = `${this.BASE_URL}/v1/admin/delete-user/${userId}`;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     })
     try {
-      // const response = this.http.post<any>(url, {email, password}).toPromise();
       const response = await firstValueFrom(
         this.http.delete<any>(url, {headers})
       );
@@ -112,12 +106,11 @@ export class UserService {
   }
 
   async updateUserByID(userId:string, userData:any, token:string):Promise<any> {
-    const url = `${this.BASE_URL}/admin/update/${userId}`;
+    const url = `${this.BASE_URL}/v1/admin/update/${userId}`;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     })
     try {
-      // const response = this.http.post<any>(url, {email, password}).toPromise();
       const response = await firstValueFrom(
         this.http.put<any>(url, userData, {headers})
       );
@@ -160,3 +153,22 @@ export class UserService {
     return false;
   }
 }
+
+/* ---------------------------- AUTHENTICATION METHODS ----------------------------*/
+// Backup:
+// async updateUserByID(userId:string, userData:any, token:string):Promise<any> {
+//   const url = `${this.BASE_URL}/v1/admin/update/${userId}`;
+//   const headers = new HttpHeaders({
+//     'Authorization': `Bearer ${token}`
+//   })
+//   try {
+//     // const response = this.http.post<any>(url, {email, password}).toPromise();
+//     const response = await firstValueFrom(
+//       this.http.put<any>(url, userData, {headers})
+//     );
+//     return response;
+//   } catch(error) {
+//     console.log("Delete User By ID failed: ", error);
+//     throw error;
+//   }
+// }

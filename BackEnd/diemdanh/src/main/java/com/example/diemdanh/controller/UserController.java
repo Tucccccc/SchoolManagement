@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.diemdanh.dto.ReqResUser;
+import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.entity.User;
 import com.example.diemdanh.service.UserManagementService;
 
@@ -20,32 +20,32 @@ public class UserController {
 	@Autowired
 	private UserManagementService userManagementService;
 	
-	@GetMapping("/admin/get-all-users")
-	public ResponseEntity<ReqResUser> getAllUsers() {
+	@GetMapping("/v1/admin/get-all-users")
+	public ResponseEntity<UserDTO> getAllUsers() {
 		return ResponseEntity.ok(userManagementService.getAllUsers());
 	}
 	
-	@GetMapping("/admin/get-user/{userId}")
-	public ResponseEntity<ReqResUser> getUserByID(@PathVariable Long userId) {
+	@GetMapping("/v1/admin/get-user/{userId}")
+	public ResponseEntity<UserDTO> getUserByID(@PathVariable Long userId) {
 		return ResponseEntity.ok(userManagementService.getUserById(userId));
 	}
 	
 	
-	@PutMapping("/admin/update/{userId}")
-	public ResponseEntity<ReqResUser> updateUser(@PathVariable Long userId, @RequestBody User userReq) {
+	@PutMapping("/v1/admin/update/{userId}")
+	public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody User userReq) {
 		return ResponseEntity.ok(userManagementService.updateUser(userId, userReq));
 	}
 	
-	@GetMapping("/adminuser/get-profile")
-	public ResponseEntity<ReqResUser> getUserProfile() {
+	@GetMapping("/v1/adminuser/get-profile")
+	public ResponseEntity<UserDTO> getUserProfile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		ReqResUser response = userManagementService.getUserProfile(username);
+		UserDTO response = userManagementService.getUserProfile(username);
 		return ResponseEntity.status(response.getIntStatusCode()).body(response);
 	}
 	
-	@DeleteMapping("/admin/delete-user/{userId}")
-	public ResponseEntity<ReqResUser> deleteUser(@PathVariable Long userId) {
+	@DeleteMapping("/v1/admin/delete-user/{userId}")
+	public ResponseEntity<UserDTO> deleteUser(@PathVariable Long userId) {
 		return ResponseEntity.ok(userManagementService.deleteUser(userId));
 	}
 }
