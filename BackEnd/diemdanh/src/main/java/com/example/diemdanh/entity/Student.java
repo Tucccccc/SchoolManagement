@@ -13,28 +13,28 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "students")
 public class Student {
-    @Id
-    private Long id; // Khóa ngoại từ bảng users
+	@Id
+	private Long id; // Khóa ngoại từ bảng users
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
-    private User user;
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "id")
+	private User user;
 
-    @Column(unique = true, nullable = false)
-    private String studentCode;
-    
-    private String mothersName;
-    private LocalDate mothersDateOfBirth;
-    private String mothersPhoneNumber;
-    private String mothersProfession;
-    
-    private String fathersName;
-    private LocalDate fathersDateOfBirth;
-    private String fathersPhoneNumber;
-    private String fathersProfession;
-    
-    private Integer intYearOfAdmission;
+	@Column(unique = true, nullable = false)
+	private String studentCode;
+
+	private String mothersName;
+	private LocalDate mothersDateOfBirth;
+	private String mothersPhoneNumber;
+	private String mothersProfession;
+
+	private String fathersName;
+	private LocalDate fathersDateOfBirth;
+	private String fathersPhoneNumber;
+	private String fathersProfession;
+
+	private Integer intYearOfAdmission;
 
 	public Student(Long id, User user, String studentCode, String mothersName, LocalDate mothersDateOfBirth,
 			String mothersPhoneNumber, String mothersProfession, String fathersName, LocalDate fathersDateOfBirth,

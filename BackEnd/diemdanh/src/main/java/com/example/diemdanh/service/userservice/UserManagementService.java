@@ -1,4 +1,4 @@
-package com.example.diemdanh.service;
+package com.example.diemdanh.service.userservice;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,11 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.entity.Student;
+import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
+import com.example.diemdanh.global.common.CommonMethods;
 import com.example.diemdanh.global.constant.GlobalConstant;
 import com.example.diemdanh.repository.StudentRepository;
 import com.example.diemdanh.repository.TeacherRepository;
 import com.example.diemdanh.repository.UserRepository;
+import com.example.diemdanh.service.JWTUtils;
 
 @Service
 public class UserManagementService {
@@ -34,76 +37,90 @@ public class UserManagementService {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
+	private CommonMethods common = new CommonMethods();
+
 	// * Register student
 	// Input: UserDTO registrationRequest
 	// Output: UserDTO userStudent
 	// Giang Ngo Truong 20/02/2025
-    @Transactional
-	public UserDTO registerStudent(UserDTO registrationRequest){
+	@Transactional
+	public UserDTO registerStudent(UserDTO registrationRequest) {
 		// Create JSON response
 		UserDTO resp = new UserDTO();
 		try {
 			// Create user
-			User user = createUser(registrationRequest);
-			
+			User user = common.createUser(registrationRequest, GlobalConstant.STR_STUDENT_ROLE, passwordEncoder.encode(registrationRequest.getStrPassword()));
+
 			// Save user
 			User userResult = userRepository.save(user);
-			
-			if(userResult == null || userResult.getId() == null) {
+
+			if (userResult == null || userResult.getId() == null) {
 				throw new IllegalStateException("User save fail");
 			}
-			
-	        // Create student
-			Student student = createStudent(userResult, registrationRequest);
-			
+
+			// Create student
+			Student student = common.createStudent(userResult, registrationRequest);
+
 			// Save student
 			Student studentResult = studentRepository.save(student);
-			
-			if(studentResult == null || studentResult.getId() == null) {
+
+			if (studentResult == null || studentResult.getId() == null) {
 				throw new IllegalStateException("Student save fail");
 			}
-			
+
 			// Set response JSON
 			resp.setUser(userResult);
 			resp.setStudent(studentResult);
 			resp.setStrMsg("Student Saved Successfully");
 			resp.setIntStatusCode(200);
-		}
-		catch(DataIntegrityViolationException e) {
-		    throw new DataIntegrityViolationException("Data Integrity Exception", e);
-		}
-		catch (Exception e) {
-		    throw new RuntimeException("An Exception has occurred", e);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Data Integrity Exception", e);
+		} catch (Exception e) {
+			throw new RuntimeException("An Exception has occurred", e);
 		}
 
 		return resp;
 	}
-	
+
 	// * Register student
 	// Input: UserDTO registrationRequest
 	// Output: UserDTO userStudent
 	// Giang Ngo Truong 20/02/2025
+	@Transactional
 	public UserDTO registerTeacher(UserDTO registrationRequest) {
 		UserDTO resp = new UserDTO();
-
 		try {
-			User user = new User();
+			// Create user
+			User user = common.createUser(registrationRequest, GlobalConstant.STR_TEACHER_ROLE, passwordEncoder.encode(registrationRequest.getStrPassword()));
 
-			user.setUsername(registrationRequest.getStrUsername());
-			user.setRole(registrationRequest.getStrRole());
-			user.setEnabled(true);
-			user.setPassword(passwordEncoder.encode(registrationRequest.getStrPassword()));
-			user.setCity(registrationRequest.getStrCity());
+			// Save user
 			User userResult = userRepository.save(user);
-			if (userResult.getId() > 0) {
-				resp.setUser(userResult);
-				resp.setStrMsg("User Saved Successfully");
-				resp.setIntStatusCode(200);
+
+			if (userResult == null || userResult.getId() == null) {
+				throw new IllegalStateException("User save fail");
 			}
-		} catch (Exception e) {
-			resp.setIntStatusCode(500);
-			resp.setStrError("An error occurred: " + e.getMessage());
+			
+			// Create teacher
+			Teacher teacher = common.createTeacher(userResult, registrationRequest);
+			
+			// Save teacher
+			Teacher teacherResult = teacherRepository.save(teacher);
+			
+			if (teacherResult == null || teacherResult.getId() == null) {
+				throw new IllegalStateException("Teacher save fail");
+			}
+			
+			resp.setUser(userResult);
+			resp.setTeacher(teacherResult);
+			resp.setStrMsg("Teacher Saved Successfully");
+			resp.setIntStatusCode(200);
+		} 
+		catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Data Integrity Exception", e);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("An Exception has occurred", e);
 		}
 
 		return resp;
@@ -135,14 +152,14 @@ public class UserManagementService {
 		}
 		return response;
 	}
-	
+
 	// * Refresh token
 	public UserDTO refreshToken(UserDTO refreshTokenRequest) {
 		UserDTO response = new UserDTO();
 		try {
 			String strUsername = jwtUtils.extractUsername(refreshTokenRequest.getStrToken());
 			User user = userRepository.findByUsername(strUsername).orElseThrow();
-			if(jwtUtils.isTokenValid(refreshTokenRequest.getStrToken(), user)) {
+			if (jwtUtils.isTokenValid(refreshTokenRequest.getStrToken(), user)) {
 				String jwt = jwtUtils.generateToken(user);
 				response.setIntStatusCode(200);
 				response.setStrToken(jwt);
@@ -152,7 +169,7 @@ public class UserManagementService {
 			}
 			response.setIntStatusCode(200);
 			return response;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			response.setIntStatusCode(500);
 			response.setStrError("An error occurred: " + e.getMessage());
 			return response;
@@ -180,7 +197,7 @@ public class UserManagementService {
 			return userDTO;
 		}
 	}
-	
+
 	// * Find an user by ID
 	public UserDTO getUserById(Long id) {
 		UserDTO userDTO = new UserDTO();
@@ -190,19 +207,19 @@ public class UserManagementService {
 			userDTO.setIntStatusCode(200);
 			userDTO.setStrMsg("User with ID: " + id.toString() + " found successfully");
 			return userDTO;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			userDTO.setIntStatusCode(500);
 			userDTO.setStrError("And error occured: " + e.getMessage());
 			return userDTO;
 		}
 	}
-	
+
 	// * Delete an user
 	public UserDTO deleteUser(Long id) {
 		UserDTO userDTO = new UserDTO();
 		try {
 			Optional<User> optUser = userRepository.findById(id);
-			if(optUser.isPresent()) {
+			if (optUser.isPresent()) {
 				userRepository.deleteById(id);
 				userDTO.setIntStatusCode(200);
 				userDTO.setStrMsg("User deleted successfully");
@@ -211,52 +228,52 @@ public class UserManagementService {
 				userDTO.setStrMsg("User not found");
 			}
 			return userDTO;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			userDTO.setIntStatusCode(500);
 			userDTO.setStrError("Deleting error occurred: " + e.getMessage());
 			return userDTO;
 		}
 	}
-	
+
 	// * Update an user
 	public UserDTO updateUser(Long id, User userUpdate) {
 		UserDTO userDTO = new UserDTO();
 		try {
 			Optional<User> optUser = userRepository.findById(id);
-			if(optUser.isPresent()) {
+			if (optUser.isPresent()) {
 				User user = optUser.get();
 				user.setUsername(userUpdate.getUsername());
 				user.setCity(userUpdate.getCity());
 
-				 // Check if password is present in the request
-				if(userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty()) {
+				// Check if password is present in the request
+				if (userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty()) {
 					// Encode the password and update it
 					user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
 				}
-				
+
 				User userSave = userRepository.save(user);
 				userDTO.setIntStatusCode(200);
 				userDTO.setUser(userSave);
 				userDTO.setStrMsg("User updated successfully");
-		
+
 			} else {
 				userDTO.setIntStatusCode(400);
 				userDTO.setStrError("User not found");
 			}
 			return userDTO;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			userDTO.setIntStatusCode(500);
 			userDTO.setStrError("An error occurred: " + e.getMessage());
 			return userDTO;
 		}
 	}
-	
+
 	// * Get user's profile
 	public UserDTO getUserProfile(String strUsername) {
 		UserDTO userDTO = new UserDTO();
 		try {
 			Optional<User> optUser = userRepository.findByUsername(strUsername);
-			if(optUser.isPresent()) {
+			if (optUser.isPresent()) {
 				userDTO.setUser(optUser.get());
 				userDTO.setIntStatusCode(200);
 				userDTO.setStrMsg("Get user's profile successfully");
@@ -265,56 +282,10 @@ public class UserManagementService {
 				userDTO.setStrError("User not found");
 			}
 			return userDTO;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			userDTO.setIntStatusCode(500);
 			userDTO.setStrError("An error occurred: " + e.getMessage());
 			return userDTO;
 		}
-	}
-	
-	// * Create new user
-	// Input: ReqResUser registrationRequest
-	// Output: User user
-	// Giang Ngo Truong 03/003/2025
-	private User createUser(UserDTO registrationRequest) {
-		User user = new User();
-		user.setUsername(registrationRequest.getStrUsername());
-		user.setIdentityNumber(registrationRequest.getStrIdentityNumber());
-		user.setPassword(passwordEncoder.encode(registrationRequest.getStrPassword()));
-		user.setGender(registrationRequest.getStrGender());
-		user.setPhoneNumber(registrationRequest.getStrPhoneNumber());
-		user.setEnabled(true);
-		user.setFullName(registrationRequest.getStrFullName());
-		user.setCity(registrationRequest.getStrCity());
-		user.setFullName(registrationRequest.getStrPernamentAddress());
-		user.setContactAddress(registrationRequest.getStrContactAddress());
-		user.setEthnic(registrationRequest.getStrEthnic());
-		user.setReligion(registrationRequest.getStrReligion());
-		user.setNationality(registrationRequest.getStrNationality());
-		user.setDateOfBirth(registrationRequest.getDateOfBirth());
-		user.setRole(GlobalConstant.STR_STUDENT_ROLE);
-		
-		return user;
-	}
-	
-	// * Create new student
-	// Input: User userResult, UserDTO registrationRequest
-	// Output: Student student
-	// Giang Ngo Truong 03/03/2025
-	private Student createStudent(User userResult, UserDTO registrationRequest) {
-		Student student = new Student();
-		student.setUser(userResult);
-		student.setStudentCode("HS" + registrationRequest.getIntStudentYearOfAdmission() + userResult.getId());
-		student.setMothersName(registrationRequest.getStrStudentMothersName());
-		student.setMothersDateOfBirth(registrationRequest.getDateStudentFathersDateOfBirth());
-		student.setMothersPhoneNumber(registrationRequest.getStrStudentMothersPhoneNumbers());
-		student.setMothersProfession(registrationRequest.getStrStudentMothersProfession());
-		student.setFathersName(registrationRequest.getStrStudentFathersName());
-		student.setFathersDateOfBirth(registrationRequest.getDateStudentFathersDateOfBirth());
-		student.setFathersPhoneNumber(registrationRequest.getStrStudentFathersPhoneNumber());
-		student.setFathersProfession(registrationRequest.getStrStudentFathersProfession());
-		student.setIntYearOfAdmission(registrationRequest.getIntStudentYearOfAdmission() != null ? registrationRequest.getIntStudentYearOfAdmission() : 0);
-		
-		return student;
 	}
 }

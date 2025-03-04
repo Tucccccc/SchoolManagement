@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.example.diemdanh.entity.Student;
+import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -45,6 +46,13 @@ public class UserDTO {
 	private Integer intStudentYearOfAdmission;
 	private Student student;
 	
+	private String strTeacherCode;
+	private String strDegree;
+	private String strCoopType;
+	private String strDeparment;
+	private String strSprecialization;
+	private Teacher teacher;
+	
 	private List<User> lstUser;
 	
 	private String strRole;
@@ -57,7 +65,8 @@ public class UserDTO {
 			LocalDate dateStudentMothersDateOfBirth, String strStudentMothersPhoneNumbers,
 			String strStudentMothersProfession, String strStudentFathersName, LocalDate dateStudentFathersDateOfBirth,
 			String strStudentFathersPhoneNumber, String strStudentFathersProfession, Integer intStudentYearOfAdmission,
-			Student student, List<User> lstUser, String strRole) {
+			Student student, String strTeacherCode, String strDegree, String strCoopType, String strDeparment,
+			String strSprecialization, Teacher teacher, List<User> lstUser, String strRole) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strError = strError;
@@ -90,6 +99,12 @@ public class UserDTO {
 		this.strStudentFathersProfession = strStudentFathersProfession;
 		this.intStudentYearOfAdmission = intStudentYearOfAdmission;
 		this.student = student;
+		this.strTeacherCode = strTeacherCode;
+		this.strDegree = strDegree;
+		this.strCoopType = strCoopType;
+		this.strDeparment = strDeparment;
+		this.strSprecialization = strSprecialization;
+		this.teacher = teacher;
 		this.lstUser = lstUser;
 		this.strRole = strRole;
 	}
@@ -97,6 +112,54 @@ public class UserDTO {
 	public UserDTO() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public String getStrTeacherCode() {
+		return strTeacherCode;
+	}
+
+	public void setStrTeacherCode(String strTeacherCode) {
+		this.strTeacherCode = strTeacherCode;
+	}
+
+	public String getStrDegree() {
+		return strDegree;
+	}
+
+	public void setStrDegree(String strDegree) {
+		this.strDegree = strDegree;
+	}
+
+	public String getStrCoopType() {
+		return strCoopType;
+	}
+
+	public void setStrCoopType(String strCoopType) {
+		this.strCoopType = strCoopType;
+	}
+
+	public String getStrDeparment() {
+		return strDeparment;
+	}
+
+	public void setStrDeparment(String strDeparment) {
+		this.strDeparment = strDeparment;
+	}
+
+	public String getStrSprecialization() {
+		return strSprecialization;
+	}
+
+	public void setStrSprecialization(String strSprecialization) {
+		this.strSprecialization = strSprecialization;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 
 	public LocalDate getDateStudentMothersDateOfBirth() {

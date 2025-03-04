@@ -18,46 +18,46 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails{
-    /**
+public class User implements UserDetails {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
- 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	@Column(unique = true, nullable = false)
-    private String username;
-	
+	private String username;
+
 	@Column(unique = true, nullable = true, length = 50)
-    private String identityNumber;
-	
+	private String identityNumber;
+
 	@Column(nullable = false)
-    private String password;
-	
-    @Column(length = 20)
-    private String gender;
-    
-    @Column(length = 50, nullable = true)
-    private String phoneNumber;
-	
-    private boolean enabled;
-    private String fullName;
-    private String city;
-    private String permanentAddress;
-    private String contactAddress;
-    private String ethnic;
-    private String religion;
-    private String nationality;
-    private LocalDate dateOfBirth;
-    
-    private String role;
-    
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
-    
+	private String password;
+
+	@Column(length = 20)
+	private String gender;
+
+	@Column(length = 50, nullable = true)
+	private String phoneNumber;
+
+	private boolean enabled;
+	private String fullName;
+	private String city;
+	private String permanentAddress;
+	private String contactAddress;
+	private String ethnic;
+	private String religion;
+	private String nationality;
+	private LocalDate dateOfBirth;
+
+	private String role;
+
+	private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime updatedAt = LocalDateTime.now();
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
