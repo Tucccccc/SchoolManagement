@@ -20,7 +20,7 @@ public class JWTUtils {
 	private static final Long LONG_EXPIRATION_TIME = 8640000L;
 	
 	public JWTUtils() {
-		String strSecret = "843567893696976453275974432697R634976R738467TR678T34865R6834R8763T478378637664538745673865783678548735687R3";
+		String strSecret = "8432783248365872374683264732487326487326487";
 		byte[] btKey = java.util.Base64.getDecoder().decode(strSecret.getBytes(StandardCharsets.UTF_8));
 		this.scrKey = new SecretKeySpec(btKey, "HmacSHA256");
 	}
@@ -28,6 +28,7 @@ public class JWTUtils {
 	public String generateToken(UserDetails userDetails) {
 		return Jwts.builder()
 				.subject(userDetails.getUsername())
+				.claim("role", userDetails.getAuthorities())
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + LONG_EXPIRATION_TIME))
 				.signWith(scrKey)
@@ -38,6 +39,7 @@ public class JWTUtils {
 		return Jwts.builder()
 				.claims(claims)
 				.subject(userDetails.getUsername())
+				.claim("role", userDetails.getAuthorities())
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + LONG_EXPIRATION_TIME))
 				.signWith(scrKey)

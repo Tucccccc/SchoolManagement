@@ -3,6 +3,7 @@ package com.example.diemdanh.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.example.diemdanh.entity.Department;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
@@ -49,13 +50,18 @@ public class UserDTO {
 	private String strTeacherCode;
 	private String strDegree;
 	private String strCoopType;
-	private String strDeparment;
+	private Department department;
 	private String strSprecialization;
 	private Teacher teacher;
 	
 	private List<User> lstUser;
 	
 	private String strRole;
+
+	public UserDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public UserDTO(int intStatusCode, String strError, String strMsg, String strToken, String strRefreshToken,
 			String strExpirationTime, String strUsername, String strIdentityNumber, String strPassword,
@@ -65,7 +71,7 @@ public class UserDTO {
 			LocalDate dateStudentMothersDateOfBirth, String strStudentMothersPhoneNumbers,
 			String strStudentMothersProfession, String strStudentFathersName, LocalDate dateStudentFathersDateOfBirth,
 			String strStudentFathersPhoneNumber, String strStudentFathersProfession, Integer intStudentYearOfAdmission,
-			Student student, String strTeacherCode, String strDegree, String strCoopType, String strDeparment,
+			Student student, String strTeacherCode, String strDegree, String strCoopType, Department department,
 			String strSprecialization, Teacher teacher, List<User> lstUser, String strRole) {
 		super();
 		this.intStatusCode = intStatusCode;
@@ -102,16 +108,11 @@ public class UserDTO {
 		this.strTeacherCode = strTeacherCode;
 		this.strDegree = strDegree;
 		this.strCoopType = strCoopType;
-		this.strDeparment = strDeparment;
+		this.department = department;
 		this.strSprecialization = strSprecialization;
 		this.teacher = teacher;
 		this.lstUser = lstUser;
 		this.strRole = strRole;
-	}
-
-	public UserDTO() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getStrTeacherCode() {
@@ -136,14 +137,6 @@ public class UserDTO {
 
 	public void setStrCoopType(String strCoopType) {
 		this.strCoopType = strCoopType;
-	}
-
-	public String getStrDeparment() {
-		return strDeparment;
-	}
-
-	public void setStrDeparment(String strDeparment) {
-		this.strDeparment = strDeparment;
 	}
 
 	public String getStrSprecialization() {
@@ -424,5 +417,13 @@ public class UserDTO {
 
 	public void setStrCity(String strCity) {
 		this.strCity = strCity;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 }

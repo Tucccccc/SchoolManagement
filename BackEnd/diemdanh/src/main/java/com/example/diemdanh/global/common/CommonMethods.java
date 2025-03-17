@@ -1,6 +1,8 @@
 package com.example.diemdanh.global.common;
 
+import com.example.diemdanh.dto.ClassDTO;
 import com.example.diemdanh.dto.UserDTO;
+import com.example.diemdanh.entity.ClassEntity;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
@@ -16,7 +18,7 @@ public class CommonMethods {
 		teacher.setTeacherCode("GV" + userResult.getId());
 		teacher.setDegree(registrationRequest.getStrDegree());
 		teacher.setCoopType(registrationRequest.getStrCoopType());
-		teacher.setDepartment(registrationRequest.getStrDeparment());
+		teacher.setDepartment(registrationRequest.getDepartment());
 		teacher.setSpecialization(registrationRequest.getStrSprecialization());
 		
 		return teacher;
@@ -68,5 +70,12 @@ public class CommonMethods {
 		user.setRole(strRole);
 
 		return user;
+	}
+	
+	public ClassEntity createClass(ClassDTO classDTO) {
+		ClassEntity classEntity = new ClassEntity();
+		classEntity.setClassName(classDTO.getStrClassName());
+		
+		return classEntity;
 	}
 }

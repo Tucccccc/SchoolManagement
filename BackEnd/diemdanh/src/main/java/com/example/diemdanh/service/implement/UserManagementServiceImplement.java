@@ -1,4 +1,4 @@
-package com.example.diemdanh.service.userservice;
+package com.example.diemdanh.service.implement;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +22,12 @@ import com.example.diemdanh.repository.StudentRepository;
 import com.example.diemdanh.repository.TeacherRepository;
 import com.example.diemdanh.repository.UserRepository;
 import com.example.diemdanh.service.JWTUtils;
+import com.example.diemdanh.service.UserManagementService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class UserManagementService {
+public class UserManagementServiceImplement implements UserManagementService{
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -202,7 +205,7 @@ public class UserManagementService {
 	public UserDTO getUserById(Long id) {
 		UserDTO userDTO = new UserDTO();
 		try {
-			User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+			User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
 			userDTO.setUser(user);
 			userDTO.setIntStatusCode(200);
 			userDTO.setStrMsg("User with ID: " + id.toString() + " found successfully");

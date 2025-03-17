@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -18,30 +19,32 @@ public class Teacher {
     @MapsId
     @JoinColumn(name = "id")
     private User user;
+    
+    @ManyToOne
+    private Department department;
 
     @Column(unique = true, nullable = false)
     private String teacherCode;
 
     private String degree;
     private String coopType;
-    private String department;
     private String specialization;
-    
-	public Teacher(Long id, User user, String teacherCode, String degree, String coopType, String department,
-			String specialization) {
-		super();
-		this.id = id;
-		this.user = user;
-		this.teacherCode = teacherCode;
-		this.degree = degree;
-		this.coopType = coopType;
-		this.department = department;
-		this.specialization = specialization;
-	}
 
 	public Teacher() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public Teacher(Long id, User user, Department departmentId, String teacherCode, String degree, String coopType,
+			String specialization) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.department = departmentId;
+		this.teacherCode = teacherCode;
+		this.degree = degree;
+		this.coopType = coopType;
+		this.specialization = specialization;
 	}
 
 	public Long getId() {
@@ -84,19 +87,19 @@ public class Teacher {
 		this.coopType = coopType;
 	}
 
-	public String getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
-	}
-
 	public String getSpecialization() {
 		return specialization;
 	}
 
 	public void setSpecialization(String specialization) {
 		this.specialization = specialization;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department departmentId) {
+		this.department = departmentId;
 	}
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.entity.User;
-import com.example.diemdanh.service.userservice.UserManagementService;
+import com.example.diemdanh.service.UserManagementService;
 
 @RestController
 public class UserController {

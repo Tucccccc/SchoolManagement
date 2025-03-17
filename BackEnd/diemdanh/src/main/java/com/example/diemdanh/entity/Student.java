@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -20,6 +21,9 @@ public class Student {
 	@MapsId
 	@JoinColumn(name = "id")
 	private User user;
+	
+	@ManyToOne
+	private ClassEntity homeRoomClass;
 
 	@Column(unique = true, nullable = false)
 	private String studentCode;
@@ -36,12 +40,19 @@ public class Student {
 
 	private Integer intYearOfAdmission;
 
-	public Student(Long id, User user, String studentCode, String mothersName, LocalDate mothersDateOfBirth,
-			String mothersPhoneNumber, String mothersProfession, String fathersName, LocalDate fathersDateOfBirth,
-			String fathersPhoneNumber, String fathersProfession, Integer intYearOfAdmission) {
+	public Student() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Student(Long id, User user, ClassEntity homeRoomClass, String studentCode, String mothersName,
+			LocalDate mothersDateOfBirth, String mothersPhoneNumber, String mothersProfession, String fathersName,
+			LocalDate fathersDateOfBirth, String fathersPhoneNumber, String fathersProfession,
+			Integer intYearOfAdmission) {
 		super();
 		this.id = id;
 		this.user = user;
+		this.homeRoomClass = homeRoomClass;
 		this.studentCode = studentCode;
 		this.mothersName = mothersName;
 		this.mothersDateOfBirth = mothersDateOfBirth;
@@ -54,9 +65,12 @@ public class Student {
 		this.intYearOfAdmission = intYearOfAdmission;
 	}
 
-	public Student() {
-		super();
-		// TODO Auto-generated constructor stub
+	public ClassEntity getHomeRoomClass() {
+		return homeRoomClass;
+	}
+
+	public void setHomeRoomClass(ClassEntity homeRoomClass) {
+		this.homeRoomClass = homeRoomClass;
 	}
 
 	public Integer getIntYearOfAdmission() {
