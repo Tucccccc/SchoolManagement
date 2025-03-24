@@ -1,5 +1,7 @@
 package com.example.diemdanh.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,22 +31,27 @@ public class Teacher {
     private String degree;
     private String coopType;
     private String specialization;
+    
+	private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime updatedAt = LocalDateTime.now();
 
 	public Teacher() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Teacher(Long id, User user, Department departmentId, String teacherCode, String degree, String coopType,
-			String specialization) {
+	public Teacher(Long id, User user, Department department, String teacherCode, String degree, String coopType,
+			String specialization, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
 		this.user = user;
-		this.department = departmentId;
+		this.department = department;
 		this.teacherCode = teacherCode;
 		this.degree = degree;
 		this.coopType = coopType;
 		this.specialization = specialization;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Long getId() {
@@ -101,5 +108,21 @@ public class Teacher {
 
 	public void setDepartment(Department departmentId) {
 		this.department = departmentId;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 }

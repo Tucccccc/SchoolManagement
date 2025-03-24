@@ -1,6 +1,7 @@
 package com.example.diemdanh.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,6 +40,9 @@ public class Student {
 	private String fathersProfession;
 
 	private Integer intYearOfAdmission;
+	
+	private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime updatedAt = LocalDateTime.now();
 
 	public Student() {
 		super();
@@ -48,7 +52,7 @@ public class Student {
 	public Student(Long id, User user, ClassEntity homeRoomClass, String studentCode, String mothersName,
 			LocalDate mothersDateOfBirth, String mothersPhoneNumber, String mothersProfession, String fathersName,
 			LocalDate fathersDateOfBirth, String fathersPhoneNumber, String fathersProfession,
-			Integer intYearOfAdmission) {
+			Integer intYearOfAdmission, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -63,6 +67,8 @@ public class Student {
 		this.fathersPhoneNumber = fathersPhoneNumber;
 		this.fathersProfession = fathersProfession;
 		this.intYearOfAdmission = intYearOfAdmission;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public ClassEntity getHomeRoomClass() {
@@ -167,5 +173,21 @@ public class Student {
 
 	public void setFathersProfession(String fathersProfession) {
 		this.fathersProfession = fathersProfession;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 }

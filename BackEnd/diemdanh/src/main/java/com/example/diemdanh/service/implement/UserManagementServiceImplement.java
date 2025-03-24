@@ -48,6 +48,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	// Output: UserDTO userStudent
 	// Giang Ngo Truong 20/02/2025
 	@Transactional
+	@Override
 	public UserDTO registerStudent(UserDTO registrationRequest) {
 		// Create JSON response
 		UserDTO resp = new UserDTO();
@@ -91,6 +92,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	// Output: UserDTO userStudent
 	// Giang Ngo Truong 20/02/2025
 	@Transactional
+	@Override
 	public UserDTO registerTeacher(UserDTO registrationRequest) {
 		UserDTO resp = new UserDTO();
 		try {
@@ -133,6 +135,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	// Input: ReqResUser loginRequest
 	// Output: ReqResUser response
 	// Giang Ngo Truong 20/02/2025
+	@Override
 	public UserDTO login(UserDTO loginRequest) {
 		UserDTO response = new UserDTO();
 
@@ -157,6 +160,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	}
 
 	// * Refresh token
+	@Override
 	public UserDTO refreshToken(UserDTO refreshTokenRequest) {
 		UserDTO response = new UserDTO();
 		try {
@@ -180,6 +184,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	}
 
 	// * Get all users
+	@Override
 	public UserDTO getAllUsers() {
 		UserDTO userDTO = new UserDTO();
 
@@ -202,6 +207,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	}
 
 	// * Find an user by ID
+	@Override
 	public UserDTO getUserById(Long id) {
 		UserDTO userDTO = new UserDTO();
 		try {
@@ -218,6 +224,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	}
 
 	// * Delete an user
+	@Override
 	public UserDTO deleteUser(Long id) {
 		UserDTO userDTO = new UserDTO();
 		try {
@@ -239,6 +246,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	}
 
 	// * Update an user
+	@Override
 	public UserDTO updateUser(Long id, User userUpdate) {
 		UserDTO userDTO = new UserDTO();
 		try {
@@ -272,6 +280,7 @@ public class UserManagementServiceImplement implements UserManagementService{
 	}
 
 	// * Get user's profile
+	@Override
 	public UserDTO getUserProfile(String strUsername) {
 		UserDTO userDTO = new UserDTO();
 		try {

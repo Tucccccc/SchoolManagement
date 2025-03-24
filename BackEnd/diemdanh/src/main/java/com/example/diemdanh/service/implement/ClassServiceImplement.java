@@ -27,6 +27,7 @@ public class ClassServiceImplement implements ClassService{
 	// Output: ClassDTO ClassDTO
 	// Giang Ngo Truong 17/03/2025
 	@Transactional
+	@Override
 	public ClassDTO addClass(ClassDTO classRequest) {
 		ClassDTO classDTOResp = new ClassDTO();
 		try {
@@ -57,7 +58,7 @@ public class ClassServiceImplement implements ClassService{
 	// Input:
 	// Output: ClassDTO ClassDTO
 	// Giang Ngo Truong 17/03/2025
-	@Transactional
+	@Override
 	public ClassDTO getAllClass() {
 		ClassDTO classDTO = new ClassDTO();
 		
@@ -83,7 +84,7 @@ public class ClassServiceImplement implements ClassService{
 	// Input: Long Id
 	// Output: ClassDTO ClassDTO
 	// Giang Ngo Truong 17/03/2025
-	@Transactional
+	@Override
 	public ClassDTO getClassById(Long Id) {
 		ClassDTO classDTO = new ClassDTO();
 		

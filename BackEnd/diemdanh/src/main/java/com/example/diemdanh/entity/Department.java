@@ -1,5 +1,7 @@
 package com.example.diemdanh.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -12,20 +14,28 @@ public class Department {
 	private Long id;
 	
 	private String departmentName;
+	private String departmentDescription;
 	
 	@ManyToOne
 	private Faculty faculty;
+	
+	private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime updatedAt = LocalDateTime.now();
 
 	public Department() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Department(Long id, String departmentName, Faculty facultyId) {
+	public Department(Long id, String departmentName, String departmentDescription, Faculty faculty,
+			LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
 		this.departmentName = departmentName;
-		this.faculty = facultyId;
+		this.departmentDescription = departmentDescription;
+		this.faculty = faculty;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Long getId() {
@@ -50,5 +60,30 @@ public class Department {
 
 	public void setFaculty(Faculty facultyId) {
 		this.faculty = facultyId;
+	}
+
+
+	public String getDepartmentDescription() {
+		return departmentDescription;
+	}
+
+	public void setDepartmentDescription(String departmentDescription) {
+		this.departmentDescription = departmentDescription;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 }
