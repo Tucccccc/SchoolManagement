@@ -1,8 +1,10 @@
 package com.example.diemdanh.global.common;
 
 import com.example.diemdanh.dto.ClassDTO;
+import com.example.diemdanh.dto.FacultyDTO;
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.entity.ClassEntity;
+import com.example.diemdanh.entity.Faculty;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
@@ -72,10 +74,27 @@ public class CommonMethods {
 		return user;
 	}
 	
+	// * createClass
+	// Input: ClassDTO classDTO
+	// Output: ClassEntity classEntity
+	// Giang Ngo Truong 20/03/2025
 	public ClassEntity createClass(ClassDTO classDTO) {
 		ClassEntity classEntity = new ClassEntity();
 		classEntity.setClassName(classDTO.getStrClassName());
+		classEntity.setClassDescription(classDTO.getStrClassDescription());
 		
 		return classEntity;
+	}
+	
+	// * createFaculty
+	// Input: FacultyDTO facultyDTO
+	// Output: Faculty faculty
+	// Giang Ngo Truong 24/03/2025
+	public Faculty createFaculty(FacultyDTO facultyDTO) {
+		Faculty faculty = new Faculty();
+		faculty.setFacultyName(facultyDTO.getStrFacultyName());
+		faculty.setFalcultyDescription(facultyDTO.getStrFacultyDescription());
+		
+		return faculty;
 	}
 }

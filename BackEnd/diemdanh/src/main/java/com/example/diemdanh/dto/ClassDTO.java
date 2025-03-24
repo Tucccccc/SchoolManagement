@@ -15,6 +15,7 @@ public class ClassDTO {
 	
 	private String strClassId;
 	private String strClassName;
+	private String strClassDescription;
 	
 	private ClassEntity classEntity;
 	
@@ -26,13 +27,14 @@ public class ClassDTO {
 	}
 
 	public ClassDTO(int intStatusCode, String strError, String strMsg, String strClassId, String strClassName,
-			ClassEntity classEntity, List<ClassEntity> lstClass) {
+			String strClassDescription, ClassEntity classEntity, List<ClassEntity> lstClass) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strError = strError;
 		this.strMsg = strMsg;
 		this.strClassId = strClassId;
 		this.strClassName = strClassName;
+		this.strClassDescription = strClassDescription;
 		this.classEntity = classEntity;
 		this.lstClass = lstClass;
 	}
@@ -91,5 +93,13 @@ public class ClassDTO {
 
 	public void setLstClass(List<ClassEntity> lstClass) {
 		this.lstClass = lstClass;
+	}
+
+	public String getStrClassDescription() {
+		return strClassDescription;
+	}
+
+	public void setStrClassDescription(String strClassDescription) {
+		this.strClassDescription = strClassDescription;
 	}
 }

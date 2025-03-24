@@ -18,6 +18,7 @@ public class ClassEntity {
 	private Long id;
 	
 	private String className;
+	private String classDescription;
 	
 	@OneToMany
 	private Set<Student> students;
@@ -25,16 +26,20 @@ public class ClassEntity {
 	private LocalDateTime createdAt = LocalDateTime.now();
 	private LocalDateTime updatedAt = LocalDateTime.now();
 
-	public ClassEntity(Long id, String className, Set<Student> students) {
-		super();
-		this.id = id;
-		this.className = className;
-		this.students = students;
-	}
-
 	public ClassEntity() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public ClassEntity(Long id, String className, String classDescription, Set<Student> students,
+			LocalDateTime createdAt, LocalDateTime updatedAt) {
+		super();
+		this.id = id;
+		this.className = className;
+		this.classDescription = classDescription;
+		this.students = students;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Long getId() {
@@ -75,5 +80,13 @@ public class ClassEntity {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public String getClassDescription() {
+		return classDescription;
+	}
+
+	public void setClassDescription(String classDescription) {
+		this.classDescription = classDescription;
 	}
 }
