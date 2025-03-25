@@ -1,5 +1,7 @@
 package com.example.diemdanh.service.implement;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,32 @@ public class FacultyServiceImplement implements FacultyService{
 		}
 		
 		return facultyResp;
+	}
+
+	// * getAllFaculty
+	// Input: 
+	// Output: FacultyDTO
+	// Giang Ngo Truong 24/03/2025
+	@Override
+	public FacultyDTO getAllFaculty() {
+		FacultyDTO facultyDTO = new FacultyDTO();
+		try {
+			List<Faculty> lstResult = faFacultyRepository.findAll();
+			if(!lstResult.isEmpty()) {
+				facultyDTO.setLstFaculty(lstResult);
+				facultyDTO.setIntStatusCode(200);
+				facultyDTO.setStrMsg("Success");
+			} else {
+				facultyDTO.setIntStatusCode(404);
+				facultyDTO.setStrMsg("Faculty not found");
+			}
+			return facultyDTO;
+		}
+		catch(Exception e) {
+			facultyDTO.setIntStatusCode(500);
+			facultyDTO.setStrError("An error occurred: " + e.getMessage());
+			return facultyDTO;
+		}
 	}
 	
 }

@@ -2,7 +2,10 @@ package com.example.diemdanh.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,8 +13,10 @@ import jakarta.persistence.Table;
 @Table(name = "faculty")
 public class Faculty {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(unique = true, nullable = false)
 	private String facultyName;
 	private String falcultyDescription;
 	

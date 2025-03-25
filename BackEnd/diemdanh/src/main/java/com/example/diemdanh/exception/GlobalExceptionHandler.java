@@ -37,7 +37,8 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExceptionData> handleDataIntegrity(DataIntegrityViolationException ex) {
-    	String errorMessage = ex.getRootCause().getMessage();
+    	Throwable rootCause = ex.getRootCause();
+    	String errorMessage = (rootCause != null) ? rootCause.getMessage() : ex.getMessage();
     	ExceptionData exceptionData = new ExceptionData();
     	ResponseEntity<ExceptionData> resEntity;
         if (errorMessage.contains("cannot be null")) {

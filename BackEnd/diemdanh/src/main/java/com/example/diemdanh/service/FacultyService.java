@@ -8,4 +8,10 @@ public interface FacultyService {
 	// Output: FacultyDTO
 	// Giang Ngo Truong 24/03/2025
 	FacultyDTO addFaculty(FacultyDTO facultyRequest);
+	
+	// * getAllFaculty
+	// Input: 
+	// Output: FacultyDTO
+	// Giang Ngo Truong 25/03/2025
+	FacultyDTO getAllFaculty();
 }
