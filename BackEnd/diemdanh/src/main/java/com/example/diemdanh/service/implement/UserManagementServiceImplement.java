@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +26,7 @@ import com.example.diemdanh.service.UserManagementService;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class UserManagementServiceImplement implements UserManagementService{
+public class UserManagementServiceImplement implements UserManagementService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -47,42 +46,29 @@ public class UserManagementServiceImplement implements UserManagementService{
 	// Input: UserDTO registrationRequest
 	// Output: UserDTO userStudent
 	// Giang Ngo Truong 20/02/2025
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public UserDTO registerStudent(UserDTO registrationRequest) {
 		// Create JSON response
 		UserDTO resp = new UserDTO();
-		try {
-			// Create user
-			User user = common.createUser(registrationRequest, GlobalConstant.STR_STUDENT_ROLE, passwordEncoder.encode(registrationRequest.getStrPassword()));
+		// Create user
+		User user = common.createUser(registrationRequest, GlobalConstant.STR_STUDENT_ROLE,
+				passwordEncoder.encode(registrationRequest.getStrPassword()));
 
-			// Save user
-			User userResult = userRepository.save(user);
+		// Save user
+		User userResult = userRepository.save(user);
 
-			if (userResult == null || userResult.getId() == null) {
-				throw new IllegalStateException("User save fail");
-			}
+		// Create student
+		Student student = common.createStudent(userResult, registrationRequest);
 
-			// Create student
-			Student student = common.createStudent(userResult, registrationRequest);
+		// Save student
+		Student studentResult = studentRepository.save(student);
 
-			// Save student
-			Student studentResult = studentRepository.save(student);
-
-			if (studentResult == null || studentResult.getId() == null) {
-				throw new IllegalStateException("Student save fail");
-			}
-
-			// Set response JSON
-			resp.setUser(userResult);
-			resp.setStudent(studentResult);
-			resp.setStrMsg("Student Saved Successfully");
-			resp.setIntStatusCode(200);
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Data Integrity Exception", e);
-		} catch (Exception e) {
-			throw new RuntimeException("An Exception has occurred", e);
-		}
+		// Set response JSON
+		resp.setUser(userResult);
+		resp.setStudent(studentResult);
+		resp.setStrMsg("Student Saved Successfully");
+		resp.setIntStatusCode(200);
 
 		return resp;
 	}
@@ -91,42 +77,28 @@ public class UserManagementServiceImplement implements UserManagementService{
 	// Input: UserDTO registrationRequest
 	// Output: UserDTO userStudent
 	// Giang Ngo Truong 20/02/2025
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public UserDTO registerTeacher(UserDTO registrationRequest) {
 		UserDTO resp = new UserDTO();
-		try {
-			// Create user
-			User user = common.createUser(registrationRequest, GlobalConstant.STR_TEACHER_ROLE, passwordEncoder.encode(registrationRequest.getStrPassword()));
 
-			// Save user
-			User userResult = userRepository.save(user);
+		// Create user
+		User user = common.createUser(registrationRequest, GlobalConstant.STR_TEACHER_ROLE,
+				passwordEncoder.encode(registrationRequest.getStrPassword()));
 
-			if (userResult == null || userResult.getId() == null) {
-				throw new IllegalStateException("User save fail");
-			}
-			
-			// Create teacher
-			Teacher teacher = common.createTeacher(userResult, registrationRequest);
-			
-			// Save teacher
-			Teacher teacherResult = teacherRepository.save(teacher);
-			
-			if (teacherResult == null || teacherResult.getId() == null) {
-				throw new IllegalStateException("Teacher save fail");
-			}
-			
-			resp.setUser(userResult);
-			resp.setTeacher(teacherResult);
-			resp.setStrMsg("Teacher Saved Successfully");
-			resp.setIntStatusCode(200);
-		} 
-		catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Data Integrity Exception", e);
-		}
-		catch (Exception e) {
-			throw new RuntimeException("An Exception has occurred", e);
-		}
+		// Save user
+		User userResult = userRepository.save(user);
+
+		// Create teacher
+		Teacher teacher = common.createTeacher(userResult, registrationRequest);
+
+		// Save teacher
+		Teacher teacherResult = teacherRepository.save(teacher);
+
+		resp.setUser(userResult);
+		resp.setTeacher(teacherResult);
+		resp.setStrMsg("Teacher Saved Successfully");
+		resp.setIntStatusCode(200);
 
 		return resp;
 	}

@@ -2,7 +2,6 @@ package com.example.diemdanh.exception;
 
 import org.apache.coyote.BadRequestException;
 import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,26 +32,6 @@ public class GlobalExceptionHandler {
         ExceptionData exceptionData = new ExceptionData();
         exceptionData.setStrMessage(ex.getMessage()+ ": " + ex.getCause());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionData);
-    }
-    
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionData> handleDataIntegrity(DataIntegrityViolationException ex) {
-    	Throwable rootCause = ex.getRootCause();
-    	String errorMessage = (rootCause != null) ? rootCause.getMessage() : ex.getMessage();
-    	ExceptionData exceptionData = new ExceptionData();
-    	ResponseEntity<ExceptionData> resEntity;
-        if (errorMessage.contains("cannot be null")) {
-        	exceptionData.setStrMessage(ex.getMessage() + ": " + ex.getCause());
-        	resEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionData);
-        } else if (errorMessage.contains("Duplicate entry") || errorMessage.contains("foreign key")) {
-        	exceptionData.setStrMessage(ex.getMessage() + ": " + ex.getCause());
-        	resEntity = ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionData);
-        } else {
-        	exceptionData.setStrMessage(ex.getMessage() + ": " + ex.getCause());
-        	resEntity = ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionData);
-        }
-        
-        return resEntity;
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
