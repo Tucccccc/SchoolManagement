@@ -1,6 +1,7 @@
 package com.example.diemdanh.service;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -8,6 +9,7 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,15 +22,15 @@ public class JWTUtils {
 	private static final Long LONG_EXPIRATION_TIME = 8640000L;
 	
 	public JWTUtils() {
-		String strSecret = "8432783248365872374683264732487326487326487";
-		byte[] btKey = java.util.Base64.getDecoder().decode(strSecret.getBytes(StandardCharsets.UTF_8));
+		String strSecret = "8432783248365872374683264732487326487326487ASVC87648732HCBVFSJK";
+		byte[] btKey = strSecret.getBytes(StandardCharsets.UTF_8);
 		this.scrKey = new SecretKeySpec(btKey, "HmacSHA256");
 	}
 	
 	public String generateToken(UserDetails userDetails) {
 		return Jwts.builder()
 				.subject(userDetails.getUsername())
-				.claim("role", userDetails.getAuthorities())
+				.claim("role", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + LONG_EXPIRATION_TIME))
 				.signWith(scrKey)
@@ -37,9 +39,7 @@ public class JWTUtils {
 	
 	public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails) {
 		return Jwts.builder()
-				.claims(claims)
 				.subject(userDetails.getUsername())
-				.claim("role", userDetails.getAuthorities())
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + LONG_EXPIRATION_TIME))
 				.signWith(scrKey)
@@ -56,7 +56,8 @@ public class JWTUtils {
 	
 	public boolean isTokenValid(String strToken, UserDetails userDetails) {
 		final String strUsername = extractUsername(strToken);
-		return (strUsername.equals(userDetails.getUsername()) && !isTokenExpired(strToken));
+		return MessageDigest.isEqual(strUsername.getBytes(), userDetails.getUsername().getBytes()) 
+	       && !isTokenExpired(strToken);
 	}
 
 	private boolean isTokenExpired(String strToken) {

@@ -1,7 +1,10 @@
 package com.example.diemdanh.service;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.diemdanh.dto.StudentDTO;
 
+@Repository
 public interface StudentService {
 	// * getAllStudent
 	// Input:

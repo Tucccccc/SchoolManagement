@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +65,10 @@ public class UserManagementServiceImplement implements UserManagementService {
 
 		// Save student
 		Student studentResult = studentRepository.save(student);
+		
+        if (studentResult == null || studentResult.getId() == null) {
+            throw new IllegalStateException("Failed to save student");
+        }
 
 		// Set response JSON
 		resp.setUser(userResult);
@@ -94,6 +100,10 @@ public class UserManagementServiceImplement implements UserManagementService {
 
 		// Save teacher
 		Teacher teacherResult = teacherRepository.save(teacher);
+		
+        if (teacherResult == null || teacherResult.getId() == null) {
+            throw new IllegalStateException("Failed to save student");
+        }
 
 		resp.setUser(userResult);
 		resp.setTeacher(teacherResult);
@@ -114,7 +124,8 @@ public class UserManagementServiceImplement implements UserManagementService {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUsername(),
 					loginRequest.getStrPassword()));
-			var user = userRepository.findByUsername(loginRequest.getStrUsername()).orElseThrow();
+			var user = userRepository.findByUsername(loginRequest.getStrUsername())
+					.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 			var jwt = jwtUtils.generateToken(user);
 			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
 			response.setIntStatusCode(200);
@@ -124,10 +135,16 @@ public class UserManagementServiceImplement implements UserManagementService {
 			response.setStrRole(user.getRole());
 			response.setStrMsg("Successfully Logged In");
 
-		} catch (Exception e) {
-			response.setIntStatusCode(500);
-			response.setStrError("An error occurred: " + e.getMessage());
-		}
+	    } catch (BadCredentialsException e) {
+	        response.setIntStatusCode(401); // Unauthorized
+	        response.setStrError("Invalid username or password");
+	    } catch (UsernameNotFoundException e) {
+	        response.setIntStatusCode(404); // Not Found
+	        response.setStrError(e.getMessage());
+	    } catch (Exception e) {
+	        response.setIntStatusCode(500); // Internal Server Error
+	        response.setStrError("An unexpected error occurred: " + e.getMessage());
+	    }
 		return response;
 	}
 
