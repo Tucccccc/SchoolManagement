@@ -28,7 +28,6 @@ import com.example.diemdanh.service.JWTUtils;
 import com.example.diemdanh.service.UserManagementService;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class UserManagementServiceImplement implements UserManagementService {
@@ -149,6 +148,9 @@ public class UserManagementServiceImplement implements UserManagementService {
 	}
 
 	// * Refresh token
+	// Input: UserDTO refreshTokenRequest
+	// Output: UserDTO userRefreshToken
+	// Giang Ngo Truong 20/02/2025
 	@Override
 	public UserDTO refreshToken(UserDTO refreshTokenRequest) {
 		UserDTO response = new UserDTO();
@@ -165,34 +167,37 @@ public class UserManagementServiceImplement implements UserManagementService {
 			}
 			response.setIntStatusCode(200);
 			return response;
+		} catch(ResponseStatusException e) {
+			throw e;
 		} catch (Exception e) {
-			response.setIntStatusCode(500);
-			response.setStrError("An error occurred: " + e.getMessage());
-			return response;
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
 		}
 	}
 
 	// * Get all users
+	// Input: 
+	// Output: UserDTO lstUsers
+	// Giang Ngo Truong 20/02/2025
+	@Transactional(readOnly = true)
 	@Override
 	public UserDTO getAllUsers() {
-		UserDTO userDTO = new UserDTO();
-
-		try {
-			List<User> result = userRepository.findAll();
-			if (!result.isEmpty()) {
-				userDTO.setLstUser(result);
-				userDTO.setIntStatusCode(200);
-				userDTO.setStrMsg("Success");
-			} else {
-				userDTO.setIntStatusCode(404);
-				userDTO.setStrMsg("No users found");
-			}
-			return userDTO;
-		} catch (Exception e) {
-			userDTO.setIntStatusCode(500);
-			userDTO.setStrError("An error occurred: " + e.getMessage());
-			return userDTO;
-		}
+		List<User> lstUser = userRepository.findAll();
+		
+		return Optional.ofNullable(lstUser)
+				.filter(list -> !list.isEmpty())
+				.map(list -> {
+					UserDTO userDTO = new UserDTO();
+					userDTO.setLstUser(lstUser);
+					userDTO.setIntStatusCode(200);
+					userDTO.setStrMsg("Success");
+					return userDTO;
+				})
+				.orElseGet(() -> {
+					UserDTO userDTO = new UserDTO();
+					userDTO.setIntStatusCode(404);
+					userDTO.setStrMsg("No users found");
+					return userDTO;
+				});
 	}
 
 	// * Find an user by ID
@@ -290,3 +295,28 @@ public class UserManagementServiceImplement implements UserManagementService {
 		}
 	}
 }
+
+
+
+
+// Backup code:
+//@Override
+//public UserDTO getAllUsers() {
+//UserDTO userDTO = new UserDTO();
+//
+//try {
+//	List<User> result = userRepository.findAll();
+//	if (!result.isEmpty()) {
+//		userDTO.setLstUser(result);
+//		userDTO.setIntStatusCode(200);
+//		userDTO.setStrMsg("Success");
+//	} else {
+//		userDTO.setIntStatusCode(404);
+//		userDTO.setStrMsg("No users found");
+//	}
+//	return userDTO;
+//} catch (Exception e) {
+//	userDTO.setIntStatusCode(500);
+//	userDTO.setStrError("An error occurred: " + e.getMessage());
+//	return userDTO;
+//}
