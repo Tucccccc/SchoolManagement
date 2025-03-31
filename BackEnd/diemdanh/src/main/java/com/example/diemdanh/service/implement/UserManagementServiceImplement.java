@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.entity.Student;
@@ -26,6 +28,7 @@ import com.example.diemdanh.service.JWTUtils;
 import com.example.diemdanh.service.UserManagementService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class UserManagementServiceImplement implements UserManagementService {
@@ -119,7 +122,7 @@ public class UserManagementServiceImplement implements UserManagementService {
 	// Giang Ngo Truong 20/02/2025
 	@Override
 	public UserDTO login(UserDTO loginRequest) {
-		UserDTO response = new UserDTO();
+		UserDTO userDTORes = new UserDTO();
 
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUsername(),
@@ -128,24 +131,21 @@ public class UserManagementServiceImplement implements UserManagementService {
 					.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 			var jwt = jwtUtils.generateToken(user);
 			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
-			response.setIntStatusCode(200);
-			response.setStrToken(jwt);
-			response.setStrRefreshToken(refreshToken);
-			response.setStrExpirationTime("24Hrs");
-			response.setStrRole(user.getRole());
-			response.setStrMsg("Successfully Logged In");
+			userDTORes.setIntStatusCode(200);
+			userDTORes.setStrToken(jwt);
+			userDTORes.setStrRefreshToken(refreshToken);
+			userDTORes.setStrExpirationTime("24Hrs");
+			userDTORes.setStrRole(user.getRole());
+			userDTORes.setStrMsg("Successfully Logged In");
 
 	    } catch (BadCredentialsException e) {
-	        response.setIntStatusCode(401); // Unauthorized
-	        response.setStrError("Invalid username or password");
-	    } catch (UsernameNotFoundException e) {
-	        response.setIntStatusCode(404); // Not Found
-	        response.setStrError(e.getMessage());
-	    } catch (Exception e) {
-	        response.setIntStatusCode(500); // Internal Server Error
-	        response.setStrError("An unexpected error occurred: " + e.getMessage());
+	    	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password", e);
+	    } catch (ResponseStatusException e) {
+			throw e;
+		} catch (Exception e) {
+	    	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
 	    }
-		return response;
+		return userDTORes;
 	}
 
 	// * Refresh token

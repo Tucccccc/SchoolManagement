@@ -4,10 +4,9 @@ import org.apache.coyote.BadRequestException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diemdanh.entity.ExceptionData;
 
@@ -19,13 +18,12 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ExceptionData> buildResponse(Exception ex, HttpStatus status) {
         ExceptionData exceptionData = new ExceptionData();
         exceptionData.setStrMessage(ex.getMessage() + ": " + ex.getCause());
-        ex.printStackTrace();
         return ResponseEntity.status(status).body(exceptionData);
     }
-    
-	@ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ExceptionData> handleUserNotFoundException(UsernameNotFoundException  ex) {
-		return buildResponse(ex, HttpStatus.NOT_FOUND);
+	
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ExceptionData> handleResponseStatusException(ResponseStatusException ex) {
+    	return buildResponse(ex, HttpStatus.UNAUTHORIZED);
     }
 	
     @ExceptionHandler(BadRequestException.class)
