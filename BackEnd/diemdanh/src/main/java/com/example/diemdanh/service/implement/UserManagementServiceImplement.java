@@ -27,8 +27,6 @@ import com.example.diemdanh.repository.UserRepository;
 import com.example.diemdanh.service.JWTUtils;
 import com.example.diemdanh.service.UserManagementService;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class UserManagementServiceImplement implements UserManagementService {
 	@Autowired
@@ -190,31 +188,41 @@ public class UserManagementServiceImplement implements UserManagementService {
 					userDTO.setLstUser(lstUser);
 					userDTO.setIntStatusCode(200);
 					userDTO.setStrMsg("Success");
+					userDTO.setIsFound(true);
 					return userDTO;
 				})
 				.orElseGet(() -> {
 					UserDTO userDTO = new UserDTO();
 					userDTO.setIntStatusCode(404);
 					userDTO.setStrMsg("No users found");
+					userDTO.setIsFound(false);
 					return userDTO;
 				});
 	}
 
-	// * Find an user by ID
+	// * Get user by ID
+	// Input: Long id
+	// Output: UserDTO userDTO
+	// Giang Ngo Truong 01/04/2025
+	@Transactional(readOnly = true)
 	@Override
 	public UserDTO getUserById(Long id) {
-		UserDTO userDTO = new UserDTO();
-		try {
-			User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-			userDTO.setUser(user);
-			userDTO.setIntStatusCode(200);
-			userDTO.setStrMsg("User with ID: " + id.toString() + " found successfully");
-			return userDTO;
-		} catch (Exception e) {
-			userDTO.setIntStatusCode(500);
-			userDTO.setStrError("And error occured: " + e.getMessage());
-			return userDTO;
-		}
+		return userRepository.findById(id)
+				.map(user -> {
+					UserDTO userDTO = new UserDTO();
+					userDTO.setUser(user);
+					userDTO.setStrMsg("User found");
+					userDTO.setIntStatusCode(200);
+					userDTO.setIsFound(true);
+					return userDTO;
+				})
+				.orElseGet(() -> {
+					UserDTO userDTO = new UserDTO();
+					userDTO.setIntStatusCode(404);
+					userDTO.setStrMsg("User cannot be found");
+					userDTO.setIsFound(false);
+					return userDTO;
+				});
 	}
 
 	// * Delete an user
@@ -319,4 +327,20 @@ public class UserManagementServiceImplement implements UserManagementService {
 //	userDTO.setIntStatusCode(500);
 //	userDTO.setStrError("An error occurred: " + e.getMessage());
 //	return userDTO;
+//}
+//
+//@Override
+//public UserDTO getUserById(Long id) {
+//	UserDTO userDTO = new UserDTO();
+//	try {
+//		User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+//		userDTO.setUser(user);
+//		userDTO.setIntStatusCode(200);
+//		userDTO.setStrMsg("User with ID: " + id.toString() + " found successfully");
+//		return userDTO;
+//	} catch (Exception e) {
+//		userDTO.setIntStatusCode(500);
+//		userDTO.setStrError("And error occured: " + e.getMessage());
+//		return userDTO;
+//	}
 //}

@@ -57,6 +57,8 @@ public class UserDTO {
 	private List<User> lstUser;
 	
 	private String strRole;
+	
+	private Boolean isFound;
 
 	public UserDTO() {
 		super();
@@ -72,7 +74,7 @@ public class UserDTO {
 			String strStudentMothersProfession, String strStudentFathersName, LocalDate dateStudentFathersDateOfBirth,
 			String strStudentFathersPhoneNumber, String strStudentFathersProfession, Integer intStudentYearOfAdmission,
 			Student student, String strTeacherCode, String strDegree, String strCoopType, Department department,
-			String strSprecialization, Teacher teacher, List<User> lstUser, String strRole) {
+			String strSprecialization, Teacher teacher, List<User> lstUser, String strRole, Boolean isFound) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strError = strError;
@@ -113,6 +115,7 @@ public class UserDTO {
 		this.teacher = teacher;
 		this.lstUser = lstUser;
 		this.strRole = strRole;
+		this.isFound = isFound;
 	}
 
 	public String getStrTeacherCode() {
@@ -425,5 +428,13 @@ public class UserDTO {
 
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+
+	public Boolean getIsFound() {
+		return isFound;
+	}
+
+	public void setIsFound(Boolean isFound) {
+		this.isFound = isFound;
 	}
 }

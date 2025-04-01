@@ -27,17 +27,19 @@ public class StudentDTO {
 	private Student student;
 	
 	private List<Student> lstStudent;
+	
+	private Boolean isFound;
 
 	public StudentDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public StudentDTO(int intStatusCode, String strError, String strMsg, String strStudentCode,
 			String strStudentMothersName, LocalDate dateStudentMothersDateOfBirth, String strStudentMothersPhoneNumbers,
 			String strStudentMothersProfession, String strStudentFathersName, LocalDate dateStudentFathersDateOfBirth,
 			String strStudentFathersPhoneNumber, String strStudentFathersProfession, Integer intStudentYearOfAdmission,
-			Student student, List<Student> lstStudent) {
+			Student student, List<Student> lstStudent, Boolean isFound) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strError = strError;
@@ -54,8 +56,9 @@ public class StudentDTO {
 		this.intStudentYearOfAdmission = intStudentYearOfAdmission;
 		this.student = student;
 		this.lstStudent = lstStudent;
+		this.isFound = isFound;
 	}
-
+	
 	public int getIntStatusCode() {
 		return intStatusCode;
 	}
@@ -174,5 +177,13 @@ public class StudentDTO {
 
 	public void setLstStudent(List<Student> lstStudent) {
 		this.lstStudent = lstStudent;
+	}
+
+	public Boolean getIsFound() {
+		return isFound;
+	}
+
+	public void setIsFound(Boolean isFound) {
+		this.isFound = isFound;
 	}
 }

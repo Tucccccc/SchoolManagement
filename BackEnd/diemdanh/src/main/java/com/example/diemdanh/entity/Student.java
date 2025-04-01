@@ -3,6 +3,8 @@ package com.example.diemdanh.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -24,6 +26,8 @@ public class Student {
 	private User user;
 	
 	@ManyToOne
+	@JoinColumn(name = "home_room_class_id")
+	@JsonBackReference
 	private ClassEntity homeRoomClass;
 
 	@Column(unique = true, nullable = false)

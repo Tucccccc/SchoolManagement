@@ -3,6 +3,9 @@ package com.example.diemdanh.entity;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +23,8 @@ public class ClassEntity {
 	private String className;
 	private String classDescription;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "homeRoomClass", cascade = CascadeType.PERSIST, orphanRemoval = true)
+	@JsonManagedReference
 	private Set<Student> students;
 	
 	private LocalDateTime createdAt = LocalDateTime.now();

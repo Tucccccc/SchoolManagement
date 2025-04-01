@@ -21,13 +21,15 @@ public class ClassDTO {
 	
 	private List<ClassEntity> lstClass; 
 	
+	private Boolean isFound;
+	
 	public ClassDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public ClassDTO(int intStatusCode, String strError, String strMsg, String strClassId, String strClassName,
-			String strClassDescription, ClassEntity classEntity, List<ClassEntity> lstClass) {
+			String strClassDescription, ClassEntity classEntity, List<ClassEntity> lstClass, Boolean isFound) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strError = strError;
@@ -37,6 +39,7 @@ public class ClassDTO {
 		this.strClassDescription = strClassDescription;
 		this.classEntity = classEntity;
 		this.lstClass = lstClass;
+		this.isFound = isFound;
 	}
 
 	public int getIntStatusCode() {
@@ -101,5 +104,13 @@ public class ClassDTO {
 
 	public void setStrClassDescription(String strClassDescription) {
 		this.strClassDescription = strClassDescription;
+	}
+
+	public Boolean getIsFound() {
+		return isFound;
+	}
+
+	public void setIsFound(Boolean isFound) {
+		this.isFound = isFound;
 	}
 }

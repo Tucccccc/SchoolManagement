@@ -17,4 +17,10 @@ public interface StudentService {
 	// Output: StudentDTO studentResp
 	// Giang Ngo Truong 24/03/2025
 	StudentDTO getStudentByID(Long Id);
+	
+	// * getStudentWithoutClass
+	// Input: 
+	// Output: StudentDTO studentResp
+	// Giang Ngo Truong 01/04/2025
+	StudentDTO getStudentWithoutClass();
 }

@@ -17,4 +17,9 @@ public class StudentController {
 	public ResponseEntity<StudentDTO> getAllStudent() {
 		return ResponseEntity.ok(studentService.getAllStudent());
 	}
+	
+	@GetMapping("v1/admin/get-student-without-class")
+	public ResponseEntity<StudentDTO> getStudentWithoutClass(){
+		return ResponseEntity.ok(studentService.getStudentWithoutClass());
+	}
 }
