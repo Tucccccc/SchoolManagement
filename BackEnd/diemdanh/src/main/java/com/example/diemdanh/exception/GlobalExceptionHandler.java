@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 	
     private ResponseEntity<ExceptionData> buildResponse(Exception ex, HttpStatus status) {
         ExceptionData exceptionData = new ExceptionData();
-        exceptionData.setStrMessage(ex.getMessage() + ": " + ex.getCause());
+        exceptionData.setStrMsg(ex.getMessage() + ": " + ex.getCause());
         return ResponseEntity.status(status).body(exceptionData);
     }
 	

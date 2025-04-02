@@ -4,19 +4,25 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diemdanh.dto.ClassDTO;
 import com.example.diemdanh.entity.ClassEntity;
+import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.global.common.CommonMethods;
 import com.example.diemdanh.repository.ClassRepository;
+import com.example.diemdanh.repository.StudentRepository;
 import com.example.diemdanh.service.ClassService;
 
 @Service
 public class ClassServiceImplement implements ClassService {
 	@Autowired
 	private ClassRepository classRepository;
+	@Autowired
+	private StudentRepository studentRepository;
 
 	private CommonMethods common = new CommonMethods();
 
@@ -96,14 +102,24 @@ public class ClassServiceImplement implements ClassService {
 
 	// * assignStudentToClass
 	// Input: List<Long> lstIdStudent, Long classId
-	// Output: Boolean iSuccess
+	// Output: Boolean isSuccess
 	// Giang Ngo Truong 02/04/2025
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public Boolean assignStudentToClass(List<Long> lstIdStudent, Long classId) {
-		for(Long id : lstIdStudent) {
-			
+	public void assignStudentToClass(List<Long> lstIdStudent, Long classId) {
+		List<Student> lstStudent = studentRepository.findAllById(lstIdStudent);
+
+		if (lstStudent.isEmpty() || lstStudent.size() != lstIdStudent.size()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student found error");
 		}
-		return null;
+
+		ClassEntity classToAssign = classRepository.findById(classId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Class to assign not found"));
+
+		for (Student student : lstStudent) {
+			student.setHomeRoomClass(classToAssign);
+		}
+
+		studentRepository.saveAll(lstStudent);
 	}
 }

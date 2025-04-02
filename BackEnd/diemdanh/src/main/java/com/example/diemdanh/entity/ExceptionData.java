@@ -1,23 +1,23 @@
 package com.example.diemdanh.entity;
 
 public class ExceptionData {
-	private String strMessage;
-
-	public ExceptionData(String strMessage) {
-		super();
-		this.strMessage = strMessage;
-	}
+	private String strMsg;
 
 	public ExceptionData() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public String getStrMessage() {
-		return strMessage;
+	public ExceptionData(String strMsg) {
+		super();
+		this.strMsg = strMsg;
 	}
 
-	public void setStrMessage(String strMessage) {
-		this.strMessage = strMessage;
+	public String getStrMsg() {
+		return strMsg;
+	}
+
+	public void setStrMsg(String strMsg) {
+		this.strMsg = strMsg;
 	}
 }

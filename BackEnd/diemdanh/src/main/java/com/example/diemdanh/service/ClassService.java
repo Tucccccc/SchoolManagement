@@ -27,5 +27,5 @@ public interface ClassService {
 	// Input: List<Long> Id
 	// Output: Boolean isSuccess
 	// Giang Ngo Truong 17/03/2025
-	Boolean assignStudentToClass(List<Long> lstIdStudent, Long classId);
+	void assignStudentToClass(List<Long> lstIdStudent, Long classId);
 }
