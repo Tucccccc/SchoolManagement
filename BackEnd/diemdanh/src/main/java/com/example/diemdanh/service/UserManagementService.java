@@ -1,7 +1,6 @@
 package com.example.diemdanh.service;
 
 import com.example.diemdanh.dto.UserDTO;
-import com.example.diemdanh.entity.User;
 
 public interface UserManagementService {
 	UserDTO registerStudent(UserDTO registrationRequest);
@@ -11,6 +10,6 @@ public interface UserManagementService {
 	UserDTO getAllUsers();
 	UserDTO getUserById(Long id);
 	UserDTO deleteUser(Long id);
-	UserDTO updateUser(Long id, User userUpdate);
+	UserDTO updateUser(Long id, UserDTO userUpdate);
 	UserDTO getUserProfile(String strUsername);
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diemdanh.dto.UserDTO;
-import com.example.diemdanh.entity.User;
 import com.example.diemdanh.service.UserManagementService;
 
 @RestController
@@ -32,7 +31,7 @@ public class UserController {
 	
 	
 	@PutMapping("/v1/admin/update/{userId}")
-	public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody User userReq) {
+	public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody UserDTO userReq) {
 		return ResponseEntity.ok(userManagementService.updateUser(userId, userReq));
 	}
 	
