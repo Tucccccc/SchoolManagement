@@ -14,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -63,6 +64,11 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return Set.of(new SimpleGrantedAuthority(role));
 	}
+	
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
 	public User(Long id, String username, String identityNumber, String password, String gender, String phoneNumber,
 			boolean enabled, String fullName, String city, String permanentAddress, String contactAddress,
