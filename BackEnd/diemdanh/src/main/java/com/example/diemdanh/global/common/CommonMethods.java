@@ -2,9 +2,11 @@ package com.example.diemdanh.global.common;
 
 import com.example.diemdanh.dto.ClassDTO;
 import com.example.diemdanh.dto.FacultyDTO;
+import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.entity.ClassEntity;
 import com.example.diemdanh.entity.Faculty;
+import com.example.diemdanh.entity.MultipleChoiceQuestion;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
@@ -96,5 +98,17 @@ public class CommonMethods {
 		faculty.setFalcultyDescription(facultyDTO.getStrFacultyDescription());
 		
 		return faculty;
+	}
+	
+	// * createMultipleChoiceQuestionWithoutAnswer
+	// Input: MultipleChoiceQuestion multipleChoiceQuestionRequest
+	// Output: MultipleChoiceQuestion multipleChoiceQuestion
+	// Giang Ngo Truong 08/04/2025
+	public MultipleChoiceQuestion createMultipleChoiceQuestionWithoutAnswer(MultipleChoiceQuestionDTO multipleChoiceQuestionRequest) {
+		MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion();
+		multipleChoiceQuestion.setQuestionText(multipleChoiceQuestionRequest.getStrQuestionText());
+		multipleChoiceQuestion.setDiffcultyLevel(multipleChoiceQuestionRequest.getIntDifficultyLevel() != null ? multipleChoiceQuestionRequest.getIntDifficultyLevel() : 0);
+		
+		return multipleChoiceQuestion;
 	}
 }

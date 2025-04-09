@@ -20,4 +20,40 @@ public class ExamQuestion {
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     private MultipleChoiceQuestion question;
+
+	public ExamQuestion() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public ExamQuestion(Long id, Exam exam, MultipleChoiceQuestion question) {
+		super();
+		this.id = id;
+		this.exam = exam;
+		this.question = question;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Exam getExam() {
+		return exam;
+	}
+
+	public void setExam(Exam exam) {
+		this.exam = exam;
+	}
+
+	public MultipleChoiceQuestion getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(MultipleChoiceQuestion question) {
+		this.question = question;
+	}
 }

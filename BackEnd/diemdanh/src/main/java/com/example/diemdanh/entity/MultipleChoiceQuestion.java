@@ -21,7 +21,7 @@ public class MultipleChoiceQuestion {
 	@Column(nullable = false)
 	private String questionText;
 	
-	private int diffcultyLevel;
+	private int difficultyLevel;
 	
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MultipleChoiceAnswer> answers;
@@ -44,7 +44,7 @@ public class MultipleChoiceQuestion {
 		super();
 		this.id = id;
 		this.questionText = questionText;
-		this.diffcultyLevel = diffcultyLevel;
+		this.difficultyLevel = diffcultyLevel;
 		this.answers = answers;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
@@ -67,11 +67,11 @@ public class MultipleChoiceQuestion {
 	}
 
 	public int getDiffcultyLevel() {
-		return diffcultyLevel;
+		return difficultyLevel;
 	}
 
 	public void setDiffcultyLevel(int diffcultyLevel) {
-		this.diffcultyLevel = diffcultyLevel;
+		this.difficultyLevel = diffcultyLevel;
 	}
 
 	public List<MultipleChoiceAnswer> getAnswers() {

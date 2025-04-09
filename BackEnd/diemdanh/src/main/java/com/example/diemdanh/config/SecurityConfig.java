@@ -37,6 +37,7 @@ public class SecurityConfig {
 												.requestMatchers("/v1/admin/**").hasAnyAuthority("ADMIN")
 												.requestMatchers("/v1/user/**").hasAnyAuthority("USER")
 												.requestMatchers("/v1/adminuser/**").hasAnyAuthority("ADMIN", "USER")
+												.requestMatchers("/v1/teacher/**").hasAuthority("TEACHER")
 												.anyRequest().authenticated()
 						)
 					.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
