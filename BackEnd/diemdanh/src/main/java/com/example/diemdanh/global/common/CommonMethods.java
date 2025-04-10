@@ -3,11 +3,14 @@ package com.example.diemdanh.global.common;
 import com.example.diemdanh.dto.ClassDTO;
 import com.example.diemdanh.dto.FacultyDTO;
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
+import com.example.diemdanh.dto.SubjectDTO;
 import com.example.diemdanh.dto.UserDTO;
+import com.example.diemdanh.dto.mapper.DTOToEntity;
 import com.example.diemdanh.entity.ClassEntity;
 import com.example.diemdanh.entity.Faculty;
 import com.example.diemdanh.entity.MultipleChoiceQuestion;
 import com.example.diemdanh.entity.Student;
+import com.example.diemdanh.entity.Subject;
 import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
 
@@ -110,5 +113,20 @@ public class CommonMethods {
 		multipleChoiceQuestion.setDiffcultyLevel(multipleChoiceQuestionRequest.getIntDifficultyLevel() != null ? multipleChoiceQuestionRequest.getIntDifficultyLevel() : 0);
 		
 		return multipleChoiceQuestion;
+	}
+	
+	// * createSubject
+	// Input: SubjectDTO subjectRequest
+	// Output: Subject subject
+	// Giang Ngo Truong 10/04/2025
+	public Subject createSubject(SubjectDTO subjectRequest) {
+		Subject subject = new Subject();
+		subject.setSubjectName(subjectRequest.getStrSubjectName());
+		subject.setSubjectDescription(subjectRequest.getStrSubjectDescription());
+		if(subjectRequest.getDepartmentDTO() != null) {
+			subject.setDepartment(DTOToEntity.departmentDTOToDepartment(subjectRequest.getDepartmentDTO()));
+		}
+		
+		return subject;
 	}
 }

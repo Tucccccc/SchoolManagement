@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
@@ -36,6 +37,14 @@ public class MultipleChoiceUserAnswer {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
     private Date answeredAt = new Date();
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 
 	public MultipleChoiceUserAnswer() {
 		super();
@@ -43,7 +52,7 @@ public class MultipleChoiceUserAnswer {
 	}
 
 	public MultipleChoiceUserAnswer(Long id, ExamResult examResult, MultipleChoiceQuestion question,
-			MultipleChoiceAnswer selectedAnswer, boolean isCorrect, Date answeredAt) {
+			MultipleChoiceAnswer selectedAnswer, boolean isCorrect, Date answeredAt, Date updatedAt) {
 		super();
 		this.id = id;
 		this.examResult = examResult;
@@ -51,6 +60,7 @@ public class MultipleChoiceUserAnswer {
 		this.selectedAnswer = selectedAnswer;
 		this.isCorrect = isCorrect;
 		this.answeredAt = answeredAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Long getId() {
@@ -99,5 +109,13 @@ public class MultipleChoiceUserAnswer {
 
 	public void setAnsweredAt(Date answeredAt) {
 		this.answeredAt = answeredAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 }

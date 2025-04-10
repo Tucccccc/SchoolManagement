@@ -23,6 +23,12 @@ public class Exam {
     @Column(nullable = false, length = 255)
     private String title;
     
+    private int durationInMinutes;
+    
+    @ManyToOne
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
+    
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
@@ -44,11 +50,13 @@ public class Exam {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Exam(Long id, String title, User createdBy, List<ExamQuestion> examQuestions, LocalDateTime createdAt,
-			LocalDateTime updatedAt) {
+	public Exam(Long id, String title, int durationInMinutes, Subject subject, User createdBy,
+			List<ExamQuestion> examQuestions, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
 		this.title = title;
+		this.durationInMinutes = durationInMinutes;
+		this.subject = subject;
 		this.createdBy = createdBy;
 		this.examQuestions = examQuestions;
 		this.createdAt = createdAt;
@@ -69,6 +77,22 @@ public class Exam {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public int getDurationInMinutes() {
+		return durationInMinutes;
+	}
+
+	public void setDurationInMinutes(int durationInMinutes) {
+		this.durationInMinutes = durationInMinutes;
+	}
+
+	public Subject getSubject() {
+		return subject;
+	}
+
+	public void setSubject(Subject subject) {
+		this.subject = subject;
 	}
 
 	public User getCreatedBy() {

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.diemdanh.dto.MultipleChoiceAnswerDTO;
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
-import com.example.diemdanh.dto.mapper.QuestionMapper;
+import com.example.diemdanh.dto.mapper.EntityToDTO;
 import com.example.diemdanh.entity.MultipleChoiceAnswer;
 import com.example.diemdanh.entity.MultipleChoiceQuestion;
 import com.example.diemdanh.global.common.CommonMethods;
@@ -58,7 +58,7 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 		multipleChoiceQuestionDTOReturn.setStrQuestionText(multipleChoiceQuestion.getQuestionText());
 		multipleChoiceQuestionDTOReturn.setIntDifficultyLevel(multipleChoiceQuestion.getDiffcultyLevel());
 		multipleChoiceQuestionDTOReturn.setLstAnswerDTO(
-				lstAnswer.stream().map(QuestionMapper::answerToAnswerDTO).collect(Collectors.toList()));
+				lstAnswer.stream().map(EntityToDTO::answerToAnswerDTO).collect(Collectors.toList()));
 
 		return multipleChoiceQuestionDTOReturn;
 	}

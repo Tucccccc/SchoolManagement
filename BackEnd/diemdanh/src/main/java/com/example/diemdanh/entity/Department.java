@@ -1,16 +1,21 @@
 package com.example.diemdanh.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "department")
 public class Department {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String departmentName;
@@ -18,6 +23,9 @@ public class Department {
 	
 	@ManyToOne
 	private Faculty faculty;
+	
+    @OneToMany(mappedBy = "department")
+    private List<Subject> subjects;
 	
 	private LocalDateTime createdAt = LocalDateTime.now();
 	private LocalDateTime updatedAt = LocalDateTime.now();
@@ -28,12 +36,13 @@ public class Department {
 	}
 
 	public Department(Long id, String departmentName, String departmentDescription, Faculty faculty,
-			LocalDateTime createdAt, LocalDateTime updatedAt) {
+			List<Subject> subjects, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
 		this.departmentName = departmentName;
 		this.departmentDescription = departmentDescription;
 		this.faculty = faculty;
+		this.subjects = subjects;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -85,5 +94,13 @@ public class Department {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<Subject> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(List<Subject> subjects) {
+		this.subjects = subjects;
 	}
 }
