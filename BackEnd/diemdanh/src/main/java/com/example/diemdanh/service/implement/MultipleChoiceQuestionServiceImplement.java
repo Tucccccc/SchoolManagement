@@ -85,4 +85,10 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 			return multipleChoiceQuestionDTOReturn;
 		});
 	}
+
+	@Override
+	public MultipleChoiceQuestionDTO getAllMTCQuestionByID(List<Long> lstId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

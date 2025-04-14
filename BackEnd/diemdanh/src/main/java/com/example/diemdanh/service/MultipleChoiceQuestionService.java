@@ -1,5 +1,7 @@
 package com.example.diemdanh.service;
 
+import java.util.List;
+
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
 
 public interface MultipleChoiceQuestionService {
@@ -14,4 +16,10 @@ public interface MultipleChoiceQuestionService {
 	// Output: MultipleChoiceQuestionDTO multipleChoiceQuestionDTO
 	// Giang Ngo Truong 14/04/2025
 	MultipleChoiceQuestionDTO getMTCQuestionByID(Long id);
+	
+	// * Get Question by ID
+	// Input: List<Long> lstId
+	// Output: MultipleChoiceQuestionDTO lstMultipleChoiceQuestionDTO
+	// Giang Ngo Truong 14/04/2025
+	MultipleChoiceQuestionDTO getAllMTCQuestionByID(List<Long> lstId);
 }
