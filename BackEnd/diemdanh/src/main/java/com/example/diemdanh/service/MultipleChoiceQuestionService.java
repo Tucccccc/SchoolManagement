@@ -8,4 +8,10 @@ public interface MultipleChoiceQuestionService {
 	// Output: MultipleChoiceQuestionDTO multipleChoiceQuestionDTO
 	// Giang Ngo Truong 08/04/2025
 	MultipleChoiceQuestionDTO addQuestion(MultipleChoiceQuestionDTO multipleChoiceQuestionRequest);
+	
+	// * Get Question by ID
+	// Input: Long id
+	// Output: MultipleChoiceQuestionDTO multipleChoiceQuestionDTO
+	// Giang Ngo Truong 14/04/2025
+	MultipleChoiceQuestionDTO getMTCQuestionByID(Long id);
 }

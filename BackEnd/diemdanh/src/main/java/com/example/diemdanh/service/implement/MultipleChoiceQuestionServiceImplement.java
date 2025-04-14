@@ -62,4 +62,27 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 
 		return multipleChoiceQuestionDTOReturn;
 	}
+
+	// * Get Question by ID
+	// Input: Long id
+	// Output: MultipleChoiceQuestionDTO multipleChoiceQuestionDTO
+	// Giang Ngo Truong 14/04/2025
+	@Transactional(readOnly = true)
+	@Override
+	public MultipleChoiceQuestionDTO getMTCQuestionByID(Long id) {
+		return multipleChoiceQuestionRepository.findById(id).map(multipleChoiceQuestion -> {
+			MultipleChoiceQuestionDTO multipleChoiceQuestionDTOReturn = new MultipleChoiceQuestionDTO();
+			multipleChoiceQuestionDTOReturn.setIntStatusCode(200);
+			multipleChoiceQuestionDTOReturn.setStrMsg("Success");
+			multipleChoiceQuestionDTOReturn.setQuestion(multipleChoiceQuestion);
+			multipleChoiceQuestionDTOReturn.setIsFound(true);
+			return multipleChoiceQuestionDTOReturn;
+		}).orElseGet(() -> {
+			MultipleChoiceQuestionDTO multipleChoiceQuestionDTOReturn = new MultipleChoiceQuestionDTO();
+			multipleChoiceQuestionDTOReturn.setIntStatusCode(404);
+			multipleChoiceQuestionDTOReturn.setStrMsg("Multiple Choice Question Not Found");
+			multipleChoiceQuestionDTOReturn.setIsFound(false);
+			return multipleChoiceQuestionDTOReturn;
+		});
+	}
 }

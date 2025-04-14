@@ -3,6 +3,7 @@ package com.example.diemdanh.dto;
 import java.util.List;
 
 import com.example.diemdanh.entity.MultipleChoiceAnswer;
+import com.example.diemdanh.entity.MultipleChoiceQuestion;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -16,6 +17,9 @@ public class MultipleChoiceQuestionDTO {
 	private List<String> lstAnswerText;
 	private String strAnswerText;
 	private List<MultipleChoiceAnswerDTO> lstAnswerDTO;
+	private List<MultipleChoiceQuestion> lstQuestion;
+	private MultipleChoiceQuestion question;
+	private String strMsg;
 	private Boolean isFound;
 	
 	public MultipleChoiceQuestionDTO() {
@@ -25,7 +29,8 @@ public class MultipleChoiceQuestionDTO {
 
 	public MultipleChoiceQuestionDTO(int intStatusCode, String strQuestionText, Integer intDifficultyLevel,
 			List<MultipleChoiceAnswer> lstAnswer, List<String> lstAnswerText, String strAnswerText,
-			List<MultipleChoiceAnswerDTO> lstAnswerDTO, Boolean isFound) {
+			List<MultipleChoiceAnswerDTO> lstAnswerDTO, List<MultipleChoiceQuestion> lstQuestion,
+			MultipleChoiceQuestion question, String strMsg, Boolean isFound) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strQuestionText = strQuestionText;
@@ -34,6 +39,9 @@ public class MultipleChoiceQuestionDTO {
 		this.lstAnswerText = lstAnswerText;
 		this.strAnswerText = strAnswerText;
 		this.lstAnswerDTO = lstAnswerDTO;
+		this.lstQuestion = lstQuestion;
+		this.question = question;
+		this.strMsg = strMsg;
 		this.isFound = isFound;
 	}
 
@@ -99,5 +107,29 @@ public class MultipleChoiceQuestionDTO {
 
 	public void setIsFound(Boolean isFound) {
 		this.isFound = isFound;
+	}
+
+	public List<MultipleChoiceQuestion> getLstQuestion() {
+		return lstQuestion;
+	}
+
+	public void setLstQuestion(List<MultipleChoiceQuestion> lstQuestion) {
+		this.lstQuestion = lstQuestion;
+	}
+
+	public String getStrMsg() {
+		return strMsg;
+	}
+
+	public void setStrMsg(String strMsg) {
+		this.strMsg = strMsg;
+	}
+
+	public MultipleChoiceQuestion getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(MultipleChoiceQuestion question) {
+		this.question = question;
 	}
 }

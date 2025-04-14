@@ -84,11 +84,11 @@ public class ClassServiceImplement implements ClassService {
 	@Transactional(readOnly = true)
 	@Override
 	public ClassDTO getClassById(Long Id) {
-		return classRepository.findById(Id).map(user -> {
+		return classRepository.findById(Id).map(classObject -> {
 			ClassDTO classDTO = new ClassDTO();
 			classDTO.setIntStatusCode(200);
 			classDTO.setStrMsg("Success");
-			classDTO.setClassEntity(user);
+			classDTO.setClassEntity(classObject);
 			classDTO.setIsFound(true);
 			return classDTO;
 		}).orElseGet(() -> {
