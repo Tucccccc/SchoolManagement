@@ -2,11 +2,14 @@ package com.example.diemdanh.service.implement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diemdanh.dto.MultipleChoiceAnswerDTO;
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
@@ -30,6 +33,7 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 	// * Add Question
 	// Input: MultipleChoiceQuestionDTO multipleChoiceQuestionRequest
 	// Output: MultipleChoiceQuestionDTO multipleChoiceQuestionDTO
+	// Add question within answer
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -86,9 +90,47 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 		});
 	}
 
+	// * Get All Question by ID
+	// Input: List<Long> lstId
+	// Output: MultipleChoiceQuestionDTO lstMultipleChoiceQuestionDTO
+	// Giang Ngo Truong 15/04/2025
+	@Transactional(readOnly = true)
 	@Override
 	public MultipleChoiceQuestionDTO getAllMTCQuestionByID(List<Long> lstId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<MultipleChoiceQuestion> lstMultipleChoiceQuestions = new ArrayList<MultipleChoiceQuestion>();
+		MultipleChoiceQuestionDTO multipleChoiceQuestionDTOReturn = new MultipleChoiceQuestionDTO();
+		lstMultipleChoiceQuestions = multipleChoiceQuestionRepository.findAllById(lstId);
+		
+		if(lstMultipleChoiceQuestions.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MTC Questions not found");
+		} else {
+			multipleChoiceQuestionDTOReturn.setIntStatusCode(200);
+			multipleChoiceQuestionDTOReturn.setIsFound(true);
+			multipleChoiceQuestionDTOReturn.setLstQuestion(lstMultipleChoiceQuestions);
+			multipleChoiceQuestionDTOReturn.setStrMsg("Success");
+		}
+		
+		return multipleChoiceQuestionDTOReturn;
+	}
+
+	// * Get All Question
+	// Input: 
+	// Output: MultipleChoiceQuestionDTO lstMultipleChoiceQuestionDTO
+	// Giang Ngo Truong 15/04/2025
+	@Transactional(readOnly = true)
+	@Override
+	public MultipleChoiceQuestionDTO getAllMTCQuestion() {
+		List<MultipleChoiceQuestion> lstMTCQuestion = multipleChoiceQuestionRepository.findAll();
+		
+		return Optional.ofNullable(lstMTCQuestion).filter(list -> !list.isEmpty()).map(list -> {
+			MultipleChoiceQuestionDTO multipleChoiceQuestionDTOReturn = new MultipleChoiceQuestionDTO();
+			multipleChoiceQuestionDTOReturn.setIntStatusCode(200);
+			multipleChoiceQuestionDTOReturn.setStrMsg("Success");
+			multipleChoiceQuestionDTOReturn.setLstQuestion(lstMTCQuestion);
+			multipleChoiceQuestionDTOReturn.setIsFound(true);
+			return multipleChoiceQuestionDTOReturn;
+		}).orElseGet(() -> {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MTC Questions not found");
+		});
 	}
 }

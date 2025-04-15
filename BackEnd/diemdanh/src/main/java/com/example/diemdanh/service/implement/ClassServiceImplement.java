@@ -45,7 +45,7 @@ public class ClassServiceImplement implements ClassService {
 		}
 
 		// Set response JSON
-		classDTOResp.setIntStatusCode(200);
+		classDTOResp.setIntStatusCode(201);
 		classDTOResp.setStrMsg("Class saved successfully");
 		classDTOResp.setClassEntity(classResult);
 
@@ -69,11 +69,7 @@ public class ClassServiceImplement implements ClassService {
 			classDTO.setIsFound(true);
 			return classDTO;
 		}).orElseGet(() -> {
-			ClassDTO classDTO = new ClassDTO();
-			classDTO.setIntStatusCode(404);
-			classDTO.setStrMsg("No users found");
-			classDTO.setIsFound(false);
-			return classDTO;
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Class not found");
 		});
 	}
 
@@ -92,11 +88,7 @@ public class ClassServiceImplement implements ClassService {
 			classDTO.setIsFound(true);
 			return classDTO;
 		}).orElseGet(() -> {
-			ClassDTO classDTO = new ClassDTO();
-			classDTO.setIntStatusCode(404);
-			classDTO.setStrMsg("Class not found");
-			classDTO.setIsFound(false);
-			return classDTO;
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Class not found");
 		});
 	}
 
@@ -110,7 +102,7 @@ public class ClassServiceImplement implements ClassService {
 		List<Student> lstStudent = studentRepository.findAllById(lstIdStudent);
 
 		if (lstStudent.isEmpty() || lstStudent.size() != lstIdStudent.size()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student found error");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
 		}
 
 		ClassEntity classToAssign = classRepository.findById(classId)

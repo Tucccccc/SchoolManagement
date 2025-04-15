@@ -17,9 +17,15 @@ public interface MultipleChoiceQuestionService {
 	// Giang Ngo Truong 14/04/2025
 	MultipleChoiceQuestionDTO getMTCQuestionByID(Long id);
 	
-	// * Get Question by ID
+	// * Get All Question by ID
 	// Input: List<Long> lstId
 	// Output: MultipleChoiceQuestionDTO lstMultipleChoiceQuestionDTO
-	// Giang Ngo Truong 14/04/2025
+	// Giang Ngo Truong 15/04/2025
 	MultipleChoiceQuestionDTO getAllMTCQuestionByID(List<Long> lstId);
+	
+	// * Get All Question
+	// Input: 
+	// Output: MultipleChoiceQuestionDTO lstMultipleChoiceQuestionDTO
+	// Giang Ngo Truong 15/04/2025
+	MultipleChoiceQuestionDTO getAllMTCQuestion();
 }

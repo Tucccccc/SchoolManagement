@@ -2,6 +2,8 @@ package com.example.diemdanh.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ public class MultipleChoiceAnswer {
 	
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
+    @JsonBackReference
     private MultipleChoiceQuestion question;
     
     @Column(nullable = false)
