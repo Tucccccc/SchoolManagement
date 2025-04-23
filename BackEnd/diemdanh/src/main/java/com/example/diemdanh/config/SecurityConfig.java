@@ -28,6 +28,12 @@ public class SecurityConfig {
 	@Autowired
 	private JWTAuthFilter jwtAuthFilter;
 	
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+    
+    @Autowired
+    private CustomAuthenticationEntryPoint authenticationEntryPoint;
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf(AbstractHttpConfigurer::disable)
@@ -43,7 +49,10 @@ public class SecurityConfig {
 					.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 					.authenticationProvider(authenticationProvider()).addFilterBefore(
 							jwtAuthFilter, UsernamePasswordAuthenticationFilter.class
-					);
+					)
+				    .exceptionHandling(exception -> exception
+				    		.accessDeniedHandler(accessDeniedHandler)
+				    		.authenticationEntryPoint(authenticationEntryPoint));
 		return httpSecurity.build();
 	}
 	

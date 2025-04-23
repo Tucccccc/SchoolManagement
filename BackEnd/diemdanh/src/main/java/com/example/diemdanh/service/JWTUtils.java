@@ -13,18 +13,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.example.diemdanh.config.JWTPropertiesConfig;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
 @Component
 public class JWTUtils {
 	private final SecretKey scrKey;
-	private static final Long LONG_EXPIRATION_TIME = 8640000L;
+	private final long longExpiration;
 	
-	public JWTUtils() {
-		String strSecret = "8432783248365872374683264732487326487326487ASVC87648732HCBVFSJK";
+	public JWTUtils(JWTPropertiesConfig jwtProperties) {
+		String strSecret = jwtProperties.getSecret();
 		byte[] btKey = strSecret.getBytes(StandardCharsets.UTF_8);
 		this.scrKey = new SecretKeySpec(btKey, "HmacSHA256");
+		this.longExpiration = jwtProperties.getExpiration();
 	}
 	
 	public String generateToken(UserDetails userDetails) {
@@ -32,7 +35,7 @@ public class JWTUtils {
 				.subject(userDetails.getUsername())
 				.claim("role", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + LONG_EXPIRATION_TIME))
+				.expiration(new Date(System.currentTimeMillis() + this.longExpiration))
 				.signWith(scrKey)
 				.compact();
 	}
@@ -41,7 +44,7 @@ public class JWTUtils {
 		return Jwts.builder()
 				.subject(userDetails.getUsername())
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + LONG_EXPIRATION_TIME))
+				.expiration(new Date(System.currentTimeMillis() + this.longExpiration))
 				.signWith(scrKey)
 				.compact();
 	}

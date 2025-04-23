@@ -4,66 +4,62 @@ import java.util.Date;
 
 public class ExceptionData {
     private Date timestamp;
-    private int statusCode;
-    private String error;
-    private String message;
+    private int intStatusCode;
+    private String strError;
+    private String strMsg;
     private String path;
+    
+	public ExceptionData() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    public ExceptionData() {
-        super();
-    }
+	public ExceptionData(Date timestamp, int intStatusCode, String strError, String strMsg, String path) {
+		super();
+		this.timestamp = timestamp;
+		this.intStatusCode = intStatusCode;
+		this.strError = strError;
+		this.strMsg = strMsg;
+		this.path = path;
+	}
 
-    public ExceptionData(String message) {
-        super();
-        this.message = message;
-    }
+	public Date getTimestamp() {
+		return timestamp;
+	}
 
-    public ExceptionData(Date timestamp, int statusCode, String error, String message, String path) {
-        super();
-        this.timestamp = timestamp;
-        this.statusCode = statusCode;
-        this.error = error;
-        this.message = message;
-        this.path = path;
-    }
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
 
-    public Date getTimestamp() {
-        return timestamp;
-    }
+	public int getIntStatusCode() {
+		return intStatusCode;
+	}
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
+	public void setIntStatusCode(int intStatusCode) {
+		this.intStatusCode = intStatusCode;
+	}
 
-    public int getStatusCode() {
-        return statusCode;
-    }
+	public String getStrError() {
+		return strError;
+	}
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
+	public void setStrError(String strError) {
+		this.strError = strError;
+	}
 
-    public String getError() {
-        return error;
-    }
+	public String getStrMsg() {
+		return strMsg;
+	}
 
-    public void setError(String error) {
-        this.error = error;
-    }
+	public void setStrMsg(String strMsg) {
+		this.strMsg = strMsg;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getPath() {
+		return path;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
+	public void setPath(String path) {
+		this.path = path;
+	}
 }

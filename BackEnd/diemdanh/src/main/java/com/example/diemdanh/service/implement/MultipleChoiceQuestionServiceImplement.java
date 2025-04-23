@@ -14,6 +14,7 @@ import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
 import com.example.diemdanh.dto.mapper.EntityToDTO;
 import com.example.diemdanh.entity.MultipleChoiceAnswer;
 import com.example.diemdanh.entity.MultipleChoiceQuestion;
+import com.example.diemdanh.exception.types.InternalServerException;
 import com.example.diemdanh.exception.types.ResourceNotFoundException;
 import com.example.diemdanh.global.common.CommonMethods;
 import com.example.diemdanh.repository.MultipleChoiceAnswerRepository;
@@ -40,6 +41,10 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 		// Save Question to get question ID
 		MultipleChoiceQuestion multipleChoiceQuestion = multipleChoiceQuestionRepository
 				.save(common.createMultipleChoiceQuestionWithoutAnswer(multipleChoiceQuestionRequest));
+		
+		if(multipleChoiceQuestion == null || multipleChoiceQuestion.getId() == null) {
+			throw new InternalServerException("Multiple Choice Question save failed");
+		}
 
 		// List of answer
 		List<MultipleChoiceAnswer> lstAnswer = new ArrayList<>();
@@ -51,7 +56,12 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 			lstAnswer.add(multipleChoiceAnswer);
 		}
 
-		multipleChoiceAnswerRepository.saveAll(lstAnswer);
+		List<MultipleChoiceAnswer> lstAnswerResult = multipleChoiceAnswerRepository.saveAll(lstAnswer);
+		
+		if(lstAnswerResult.isEmpty()) {
+			throw new InternalServerException("List Answer save failed");
+		}
+		
 		// Add list answer to saved question
 		multipleChoiceQuestion.setAnswers(lstAnswer);
 
