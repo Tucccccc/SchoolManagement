@@ -6,16 +6,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diemdanh.dto.MultipleChoiceAnswerDTO;
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
 import com.example.diemdanh.dto.mapper.EntityToDTO;
 import com.example.diemdanh.entity.MultipleChoiceAnswer;
 import com.example.diemdanh.entity.MultipleChoiceQuestion;
+import com.example.diemdanh.exception.types.ResourceNotFoundException;
 import com.example.diemdanh.global.common.CommonMethods;
 import com.example.diemdanh.repository.MultipleChoiceAnswerRepository;
 import com.example.diemdanh.repository.MultipleChoiceQuestionRepository;
@@ -82,11 +81,7 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 			multipleChoiceQuestionDTOReturn.setIsFound(true);
 			return multipleChoiceQuestionDTOReturn;
 		}).orElseGet(() -> {
-			MultipleChoiceQuestionDTO multipleChoiceQuestionDTOReturn = new MultipleChoiceQuestionDTO();
-			multipleChoiceQuestionDTOReturn.setIntStatusCode(404);
-			multipleChoiceQuestionDTOReturn.setStrMsg("Multiple Choice Question Not Found");
-			multipleChoiceQuestionDTOReturn.setIsFound(false);
-			return multipleChoiceQuestionDTOReturn;
+			throw new ResourceNotFoundException("MTC Question", "ID", id.toString());
 		});
 	}
 
@@ -102,7 +97,7 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 		lstMultipleChoiceQuestions = multipleChoiceQuestionRepository.findAllById(lstId);
 		
 		if(lstMultipleChoiceQuestions.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MTC Questions not found");
+			throw new ResourceNotFoundException("MTC Questions not found");
 		} else {
 			multipleChoiceQuestionDTOReturn.setIntStatusCode(200);
 			multipleChoiceQuestionDTOReturn.setIsFound(true);
@@ -130,7 +125,7 @@ public class MultipleChoiceQuestionServiceImplement implements MultipleChoiceQue
 			multipleChoiceQuestionDTOReturn.setIsFound(true);
 			return multipleChoiceQuestionDTOReturn;
 		}).orElseGet(() -> {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MTC Questions not found");
+			throw new ResourceNotFoundException("MTC Questions not found");
 		});
 	}
 }

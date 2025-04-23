@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import com.example.diemdanh.entity.ExceptionData;
+import com.example.diemdanh.exception.types.BadRequestException;
+import com.example.diemdanh.exception.types.DuplicateResourceException;
+import com.example.diemdanh.exception.types.ResourceNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
