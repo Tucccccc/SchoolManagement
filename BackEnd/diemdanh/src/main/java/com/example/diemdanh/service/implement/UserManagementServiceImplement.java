@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.diemdanh.config.JWTUtils;
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.entity.Teacher;
@@ -24,7 +25,6 @@ import com.example.diemdanh.global.constant.GlobalConstant;
 import com.example.diemdanh.repository.StudentRepository;
 import com.example.diemdanh.repository.TeacherRepository;
 import com.example.diemdanh.repository.UserRepository;
-import com.example.diemdanh.service.JWTUtils;
 import com.example.diemdanh.service.UserManagementService;
 
 @Service

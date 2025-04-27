@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.diemdanh.service.UserDetailsSV;
+import com.example.diemdanh.service.implement.UserDetailsSV;
 
 @Configuration
 @EnableWebSecurity

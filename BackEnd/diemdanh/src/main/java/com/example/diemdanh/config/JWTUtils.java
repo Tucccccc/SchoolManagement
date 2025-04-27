@@ -1,4 +1,4 @@
-package com.example.diemdanh.service;
+package com.example.diemdanh.config;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -12,8 +12,6 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import com.example.diemdanh.config.JWTPropertiesConfig;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

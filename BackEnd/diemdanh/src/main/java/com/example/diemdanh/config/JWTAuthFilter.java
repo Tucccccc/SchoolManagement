@@ -13,8 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.diemdanh.entity.ExceptionData;
 import com.example.diemdanh.global.common.HttpStatusText;
-import com.example.diemdanh.service.JWTUtils;
-import com.example.diemdanh.service.UserDetailsSV;
+import com.example.diemdanh.service.implement.UserDetailsSV;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.JwtException;
