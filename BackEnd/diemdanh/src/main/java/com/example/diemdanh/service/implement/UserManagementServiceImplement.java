@@ -1,13 +1,11 @@
 package com.example.diemdanh.service.implement;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diemdanh.config.JWTUtils;
+import com.example.diemdanh.dto.TokenResponse;
 import com.example.diemdanh.dto.UserDTO;
+import com.example.diemdanh.entity.RefreshToken;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.entity.Teacher;
 import com.example.diemdanh.entity.User;
@@ -25,6 +25,7 @@ import com.example.diemdanh.global.constant.GlobalConstant;
 import com.example.diemdanh.repository.StudentRepository;
 import com.example.diemdanh.repository.TeacherRepository;
 import com.example.diemdanh.repository.UserRepository;
+import com.example.diemdanh.service.RefreshTokenService;
 import com.example.diemdanh.service.UserManagementService;
 
 @Service
@@ -41,6 +42,8 @@ public class UserManagementServiceImplement implements UserManagementService {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
 	private CommonMethods common = new CommonMethods();
 
@@ -118,59 +121,38 @@ public class UserManagementServiceImplement implements UserManagementService {
 	// Output: ReqResUser response
 	// Giang Ngo Truong 20/02/2025
 	@Override
-	public UserDTO login(UserDTO loginRequest) {
+	public TokenResponse login(UserDTO loginRequest) {
 		UserDTO userDTORes = new UserDTO();
 
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUsername(),
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUsername(),
 					loginRequest.getStrPassword()));
-			var user = userRepository.findByUsername(loginRequest.getStrUsername())
+		var user = userRepository.findByUsername(loginRequest.getStrUsername())
 					.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-			var jwt = jwtUtils.generateToken(user);
-			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
-			userDTORes.setIntStatusCode(200);
-			userDTORes.setStrToken(jwt);
-			userDTORes.setStrRefreshToken(refreshToken);
-			userDTORes.setStrExpirationTime("24Hrs");
-			userDTORes.setStrRole(user.getRole());
-			userDTORes.setStrMsg("Successfully Logged In");
+		String jwt = jwtUtils.generateToken(user);
+		RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+		userDTORes.setIntStatusCode(200);
+		userDTORes.setStrToken(jwt);
+		userDTORes.setStrExpirationTime("24Hrs");
+		userDTORes.setStrRole(user.getRole());
+		userDTORes.setStrMsg("Successfully Logged In");
 
-		} catch (BadCredentialsException e) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password", e);
-		} catch (ResponseStatusException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
-		}
-		return userDTORes;
+		return new TokenResponse(jwt, refreshToken.getToken());
 	}
+	
+    @Override
+    public TokenResponse refreshToken(String refreshTokenStr) {
+        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenStr)
+                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
 
-	// * Refresh token
-	// Input: UserDTO refreshTokenRequest
-	// Output: UserDTO userRefreshToken
-	// Giang Ngo Truong 20/02/2025
-	@Override
-	public UserDTO refreshToken(UserDTO refreshTokenRequest) {
-		UserDTO response = new UserDTO();
-		try {
-			String strUsername = jwtUtils.extractUsername(refreshTokenRequest.getStrToken());
-			User user = userRepository.findByUsername(strUsername).orElseThrow();
-			if (jwtUtils.isTokenValid(refreshTokenRequest.getStrToken(), user)) {
-				String jwt = jwtUtils.generateToken(user);
-				response.setIntStatusCode(200);
-				response.setStrToken(jwt);
-				response.setStrRefreshToken(refreshTokenRequest.getStrToken());
-				response.setStrExpirationTime("24Hr");
-				response.setStrMsg("Successfully Refreshed Token");
-			}
-			response.setIntStatusCode(200);
-			return response;
-		} catch (ResponseStatusException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
-		}
-	}
+        if (refreshTokenService.isTokenExpired(refreshToken)) {
+            refreshTokenService.deleteByUser(refreshToken.getUser());
+            throw new RuntimeException("Refresh token expired");
+        }
+
+        String newAccessToken = jwtUtils.generateToken(refreshToken.getUser());
+
+        return new TokenResponse(newAccessToken, refreshToken.getToken());
+    }
 
 	// * Get all users
 	// Input:
