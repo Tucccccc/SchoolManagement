@@ -35,7 +35,7 @@ public class FacultyServiceImplement implements FacultyService {
 		Faculty facultyResult = faFacultyRepository.save(faculty);
 
 		if (facultyResult == null || facultyResult.getId() == null) {
-			throw new IllegalStateException("Faculty save fail");
+			throw new IllegalStateException("An Error Occurrued");
 		}
 
 		// Set response JSON
@@ -66,7 +66,7 @@ public class FacultyServiceImplement implements FacultyService {
 			return facultyDTO;
 		} catch (Exception e) {
 			facultyDTO.setIntStatusCode(500);
-			facultyDTO.setStrError("An error occurred: " + e.getMessage());
+			facultyDTO.setStrError("An error occurred");
 			return facultyDTO;
 		}
 	}

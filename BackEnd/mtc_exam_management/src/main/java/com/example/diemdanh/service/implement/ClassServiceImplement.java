@@ -41,7 +41,7 @@ public class ClassServiceImplement implements ClassService {
 		ClassEntity classResult = classRepository.save(classEntity);
 
 		if (classResult == null || classResult.getId() == null) {
-			throw new IllegalStateException("Class save fail");
+			throw new IllegalStateException("An Error Occurrued");
 		}
 
 		// Set response JSON
@@ -106,7 +106,7 @@ public class ClassServiceImplement implements ClassService {
 		}
 
 		ClassEntity classToAssign = classRepository.findById(classId)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Class to assign not found"));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "An Error Occurrued"));
 
 		for (Student student : lstStudent) {
 			student.setHomeRoomClass(classToAssign);

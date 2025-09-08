@@ -33,7 +33,7 @@ public class Exam {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
     
-    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<ExamQuestion> examQuestions;
     
     @Column(updatable = false)

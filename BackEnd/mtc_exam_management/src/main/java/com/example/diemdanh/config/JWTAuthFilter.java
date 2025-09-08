@@ -50,9 +50,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (JwtException ex) {
-            handleJwtException(response, "Invalid JWT: " + ex.getMessage(), HttpServletResponse.SC_UNAUTHORIZED, request.getRequestURI());
+            handleJwtException(response, "An Error Occurrued", HttpServletResponse.SC_UNAUTHORIZED, request.getRequestURI());
         } catch (Exception ex) {
-            handleJwtException(response, "Unexpected error: " + ex.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, request.getRequestURI());
+            handleJwtException(response, "An Error Occurrued", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, request.getRequestURI());
         }
     }
     

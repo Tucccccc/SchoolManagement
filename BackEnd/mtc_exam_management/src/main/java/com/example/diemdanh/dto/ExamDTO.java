@@ -1,5 +1,8 @@
 package com.example.diemdanh.dto;
 
+import java.util.List;
+
+import com.example.diemdanh.entity.Exam;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -13,18 +16,25 @@ public class ExamDTO {
 	private String strTitle;
 	private int intDuration;
 	
+	private List<Exam> lstExam;
+	
+	private Boolean isFound;
+	
 	public ExamDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ExamDTO(int intStatusCode, String strError, String strMsg, String strTitle, int intDuration) {
+	public ExamDTO(int intStatusCode, String strError, String strMsg, String strTitle, int intDuration,
+			List<Exam> lstExam, Boolean isFound) {
 		super();
 		this.intStatusCode = intStatusCode;
 		this.strError = strError;
 		this.strMsg = strMsg;
 		this.strTitle = strTitle;
 		this.intDuration = intDuration;
+		this.lstExam = lstExam;
+		this.isFound = isFound;
 	}
 
 	public int getIntStatusCode() {
@@ -65,5 +75,21 @@ public class ExamDTO {
 
 	public void setIntDuration(int intDuration) {
 		this.intDuration = intDuration;
+	}
+
+	public List<Exam> getLstExam() {
+		return lstExam;
+	}
+
+	public void setLstExam(List<Exam> lstExam) {
+		this.lstExam = lstExam;
+	}
+
+	public Boolean getIsFound() {
+		return isFound;
+	}
+
+	public void setIsFound(Boolean isFound) {
+		this.isFound = isFound;
 	}
 }
