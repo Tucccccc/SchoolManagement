@@ -13,9 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.diemdanh.config.JWTUtils;
-import com.example.diemdanh.dto.TokenResponse;
+import com.example.diemdanh.config.security.JWTUtils;
 import com.example.diemdanh.dto.UserDTO;
+import com.example.diemdanh.dto.request.LoginRequest;
+import com.example.diemdanh.dto.response.LoginResponse;
 import com.example.diemdanh.entity.RefreshToken;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.entity.Teacher;
@@ -121,12 +122,12 @@ public class UserManagementServiceImplement implements UserManagementService {
 	// Output: ReqResUser response
 	// Giang Ngo Truong 20/02/2025
 	@Override
-	public TokenResponse login(UserDTO loginRequest) {
+	public LoginResponse login(LoginRequest loginRequest) {
 		UserDTO userDTORes = new UserDTO();
 
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUsername(),
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUserName(),
 					loginRequest.getStrPassword()));
-		var user = userRepository.findByUsername(loginRequest.getStrUsername())
+		var user = userRepository.findByUsername(loginRequest.getStrUserName())
 					.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 		String jwt = jwtUtils.generateToken(user);
 		RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
@@ -136,11 +137,11 @@ public class UserManagementServiceImplement implements UserManagementService {
 		userDTORes.setStrRole(user.getRole());
 		userDTORes.setStrMsg("Successfully Logged In");
 
-		return new TokenResponse(jwt, refreshToken.getToken());
+		return new LoginResponse(user.getUsername(), user.getRole(), jwt, refreshToken.getToken());
 	}
 	
     @Override
-    public TokenResponse refreshToken(String refreshTokenStr) {
+    public LoginResponse refreshToken(String refreshTokenStr) {
         RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenStr)
                 .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
 
@@ -151,7 +152,7 @@ public class UserManagementServiceImplement implements UserManagementService {
 
         String newAccessToken = jwtUtils.generateToken(refreshToken.getUser());
 
-        return new TokenResponse(newAccessToken, refreshToken.getToken());
+        return new LoginResponse(refreshToken.getUser().getUsername(), refreshToken.getUser().getRole(), newAccessToken, refreshToken.getToken());
     }
 
 	// * Get all users

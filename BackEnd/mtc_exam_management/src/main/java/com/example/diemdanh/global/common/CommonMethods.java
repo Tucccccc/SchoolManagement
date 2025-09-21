@@ -1,11 +1,14 @@
 package com.example.diemdanh.global.common;
 
-import com.example.diemdanh.dto.ClassDTO;
+import java.util.Objects;
+
 import com.example.diemdanh.dto.FacultyDTO;
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
 import com.example.diemdanh.dto.SubjectDTO;
 import com.example.diemdanh.dto.UserDTO;
+import com.example.diemdanh.dto.dtoenum.ClassStatus;
 import com.example.diemdanh.dto.mapper.DTOToEntity;
+import com.example.diemdanh.dto.request.create.CreateClassRequest;
 import com.example.diemdanh.entity.ClassEntity;
 import com.example.diemdanh.entity.Faculty;
 import com.example.diemdanh.entity.MultipleChoiceQuestion;
@@ -83,11 +86,11 @@ public class CommonMethods {
 	// Input: ClassDTO classDTO
 	// Output: ClassEntity classEntity
 	// Giang Ngo Truong 20/03/2025
-	public ClassEntity createClass(ClassDTO classDTO) {
+	public ClassEntity createClass(CreateClassRequest classDTO) {
 		ClassEntity classEntity = new ClassEntity();
 		classEntity.setClassName(classDTO.getStrClassName());
 		classEntity.setClassDescription(classDTO.getStrClassDescription());
-		
+		classEntity.setStatus(ClassStatus.ACTIVE);
 		return classEntity;
 	}
 	
@@ -129,4 +132,13 @@ public class CommonMethods {
 		
 		return subject;
 	}
+	
+	// * compareStrings
+	// Input: String s1, String s2
+	// Output: boolean
+	// Giang Ngo Truong 10/04/2025
+	public boolean compareStrings(String s1, String s2) {
+	    return Objects.equals(s1, s2);
+	}
+
 }

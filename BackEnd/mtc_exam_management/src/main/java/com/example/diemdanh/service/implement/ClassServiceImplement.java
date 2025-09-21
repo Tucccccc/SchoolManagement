@@ -2,14 +2,20 @@ package com.example.diemdanh.service.implement;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.diemdanh.dto.ClassDTO;
+import com.example.diemdanh.dto.ResponseData;
+import com.example.diemdanh.dto.dtoenum.ClassStatus;
+import com.example.diemdanh.dto.dtoenum.EnumResponseStatus;
+import com.example.diemdanh.dto.mapper.MapperComponentHelper;
+import com.example.diemdanh.dto.request.create.CreateClassRequest;
+import com.example.diemdanh.dto.request.update.UpdateClassRequest;
+import com.example.diemdanh.dto.response.ClassResponse;
 import com.example.diemdanh.entity.ClassEntity;
 import com.example.diemdanh.entity.Student;
 import com.example.diemdanh.global.common.CommonMethods;
@@ -19,12 +25,19 @@ import com.example.diemdanh.service.ClassService;
 
 @Service
 public class ClassServiceImplement implements ClassService {
-	@Autowired
-	private ClassRepository classRepository;
-	@Autowired
-	private StudentRepository studentRepository;
-
+	private final ClassRepository classRepository;
+	private final StudentRepository studentRepository;
+	private final MapperComponentHelper mapperClassComponent;
+	
 	private CommonMethods common = new CommonMethods();
+
+	public ClassServiceImplement(ClassRepository classRepository, StudentRepository studentRepository,
+			MapperComponentHelper mapperClassComponent) {
+		super();
+		this.classRepository = classRepository;
+		this.studentRepository = studentRepository;
+		this.mapperClassComponent = mapperClassComponent;
+	}
 
 	// * Add Class
 	// Input: ClassDTO addClass
@@ -32,10 +45,10 @@ public class ClassServiceImplement implements ClassService {
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public ClassDTO addClass(ClassDTO classRequest) {
-		ClassDTO classDTOResp = new ClassDTO();
+	public ResponseData<ClassResponse> addClass(CreateClassRequest createClassRequest) {
+		ClassResponse classDTOResp = new ClassResponse();
 		// Create class
-		ClassEntity classEntity = common.createClass(classRequest);
+		ClassEntity classEntity = common.createClass(createClassRequest);
 
 		// Save class
 		ClassEntity classResult = classRepository.save(classEntity);
@@ -45,11 +58,9 @@ public class ClassServiceImplement implements ClassService {
 		}
 
 		// Set response JSON
-		classDTOResp.setIntStatusCode(201);
-		classDTOResp.setStrMsg("Class saved successfully");
-		classDTOResp.setClassEntity(classResult);
+		classDTOResp = mapperClassComponent.convertClassToDTO(classEntity);
 
-		return classDTOResp;
+		return ResponseData.success(classDTOResp);
 	}
 
 	// * Get all Class
@@ -58,19 +69,44 @@ public class ClassServiceImplement implements ClassService {
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(readOnly = true)
 	@Override
-	public ClassDTO getAllClass() {
-		List<ClassEntity> lstClass = classRepository.findAll();
-
-		return Optional.ofNullable(lstClass).filter(list -> !list.isEmpty()).map(list -> {
-			ClassDTO classDTO = new ClassDTO();
-			classDTO.setLstClass(lstClass);
-			classDTO.setIntStatusCode(200);
-			classDTO.setStrMsg("Success");
-			classDTO.setIsFound(true);
-			return classDTO;
-		}).orElseGet(() -> {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Class not found");
-		});
+	public ResponseData<List<ClassResponse>> getAllClass() {
+        List<ClassResponse> classes = classRepository.findAll().stream()
+                .map(mapperClassComponent::convertClassToDTO)
+                .collect(Collectors.toList());
+        
+        if (classes.isEmpty()) {
+            return ResponseData.success(classes);
+        }
+        
+        return ResponseData.success(classes);
+	}
+	
+	// * Update Class
+	// Input:
+	// Output: ClassDTO ClassDTO
+	// Giang Ngo Truong 17/03/2025
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public ResponseData<ClassResponse> updateClass(Long id, UpdateClassRequest updateClassRequest) {
+		ClassEntity classEntity = classRepository.findById(id).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Class not found")
+			);
+		
+		if(!common.compareStrings(classEntity.getClassName(), updateClassRequest.getStrClassName())) {
+			classEntity.setClassName(updateClassRequest.getStrClassName());
+		}
+		if(!common.compareStrings(classEntity.getClassDescription(), updateClassRequest.getStrClassDescription())) {
+			classEntity.setClassDescription(updateClassRequest.getStrClassDescription());
+		}
+		if(!common.compareStrings(String.valueOf(classEntity.getStatus()), String.valueOf(updateClassRequest.getStatus()))) {
+			classEntity.setStatus(updateClassRequest.getStatus());
+		}
+		
+		classRepository.save(classEntity);
+		
+		ClassResponse classResponse = mapperClassComponent.convertClassToDTO(classEntity);
+		
+		return ResponseData.success(classResponse);
 	}
 
 	// * Get Class by ID
@@ -79,18 +115,46 @@ public class ClassServiceImplement implements ClassService {
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(readOnly = true)
 	@Override
-	public ClassDTO getClassById(Long Id) {
+	public ResponseData<ClassResponse> getClassById(Long Id) {
 		return classRepository.findById(Id).map(classObject -> {
-			ClassDTO classDTO = new ClassDTO();
-			classDTO.setIntStatusCode(200);
-			classDTO.setStrMsg("Success");
-			classDTO.setClassEntity(classObject);
-			classDTO.setIsFound(true);
-			return classDTO;
+			ClassResponse classDTO = new ClassResponse();
+			classDTO.setId(classObject.getId());
+			classDTO.setClassName(classObject.getClassName());
+			classDTO.setClassDescription(classObject.getClassDescription());
+			classDTO.setStatus(classObject.getStatus());
+			classDTO.setCreatedAt(classObject.getCreatedAt());
+			classDTO.setUpdatedAt(classObject.getUpdatedAt());
+			return new ResponseData<ClassResponse>(EnumResponseStatus.SUCCESS, "Success", classDTO);
 		}).orElseGet(() -> {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Class not found");
+			return ResponseData.notFound("Class not found");
 		});
 	}
+	
+	// * Delete Class by ID
+	// Input: Long Id
+	// Output: ResponseData<ClassResponse>
+	// Giang Ngo Truong 18/09/2025
+	@Override
+	public ResponseData<ClassResponse> deleteClassById(Long id) {
+		ClassResponse classResponse = new ClassResponse();
+		Optional<ClassEntity> optionClassEntity = classRepository.findById(id);
+        if (optionClassEntity.isEmpty()) {
+            return ResponseData.notFound("Class not found");
+        }
+        
+        try {
+        	ClassEntity classEntity = optionClassEntity.get();
+        	classEntity.setStatus(ClassStatus.INACTIVE);
+        	classRepository.save(classEntity);
+            
+            classResponse = mapperClassComponent.convertClassToDTO(classEntity);
+            return ResponseData.success(classResponse);
+            
+        } catch (Exception e) {
+            return ResponseData.error("Error", classResponse);
+        }
+	}
+	
 
 	// * assignStudentToClass
 	// Input: List<Long> lstIdStudent, Long classId

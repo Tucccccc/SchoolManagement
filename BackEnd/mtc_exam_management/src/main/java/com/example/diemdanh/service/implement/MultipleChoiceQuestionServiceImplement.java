@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.diemdanh.config.exception.types.InternalServerException;
+import com.example.diemdanh.config.exception.types.ResourceNotFoundException;
 import com.example.diemdanh.dto.MultipleChoiceAnswerDTO;
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
 import com.example.diemdanh.dto.mapper.EntityToDTO;
 import com.example.diemdanh.entity.MultipleChoiceAnswer;
 import com.example.diemdanh.entity.MultipleChoiceQuestion;
-import com.example.diemdanh.exception.types.InternalServerException;
-import com.example.diemdanh.exception.types.ResourceNotFoundException;
 import com.example.diemdanh.global.common.CommonMethods;
 import com.example.diemdanh.repository.MultipleChoiceAnswerRepository;
 import com.example.diemdanh.repository.MultipleChoiceQuestionRepository;
