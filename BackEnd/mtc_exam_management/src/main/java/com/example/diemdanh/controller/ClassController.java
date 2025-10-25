@@ -1,6 +1,5 @@
 package com.example.diemdanh.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,40 +39,35 @@ public class ClassController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "Add Class", description = "Save Class to Database require ADMIN")
 	public ResponseEntity<ResponseData<ClassResponse>> addClass(@Valid @RequestBody CreateClassRequest req) {
-		ResponseData<ClassResponse> response = classService.addClass(req);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		return ResponseEntity.status(HttpStatus.CREATED).body(ResponseData.success(classService.addClass(req)));
 	}
 	
 	@GetMapping("/v1/admin/get-all-class")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "Get all Class", description = "Get all Class require ADMIN")
 	public ResponseEntity<ResponseData<List<ClassResponse>>> getAllClass() {
-        ResponseData<List<ClassResponse>> response = classService.getAllClass();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ResponseData.success(classService.getAllClass()));
 	}
 	
 	@PutMapping("/v1/admin/update-class/{classID}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "Update Class", description = "Update Class require ADMIN")
 	public ResponseEntity<ResponseData<ClassResponse>> updateClass(@PathVariable Long classID, @RequestBody UpdateClassRequest req) {
-		ResponseData<ClassResponse> response = classService.updateClass(classID, req);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return ResponseEntity.ok(ResponseData.success(classService.updateClass(classID, req)));
 	}
 	
 	@GetMapping("/v1/admin/get-all-class/{classID}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "Get Class by ID", description = "Get Class by ID require ADMIN")
 	public ResponseEntity<ResponseData<ClassResponse>> getClassByID(@PathVariable Long classID) {
-        ResponseData<ClassResponse> response = classService.getClassById(classID);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ResponseData.success(classService.getClassById(classID)));
 	}
 	
 	@DeleteMapping("/v1/admin/delete-class-by-id/{classID}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "Delete Class by ID", description = "Delete Class by ID require ADMIN")
 	public ResponseEntity<ResponseData<ClassResponse>> deleteClassByID(@PathVariable Long classID) {
-        ResponseData<ClassResponse> response = classService.deleteClassById(classID);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ResponseData.success(classService.deleteClassById(classID)));
 	}
 	
     @PostMapping("/v1/admin/assign-students-to-class/{classId}")
@@ -81,8 +75,6 @@ public class ClassController {
 	@Operation(summary = "Assign Student to Class", description = "Assign Student to Class require ADMIN")
     public ResponseEntity<Map<String, String>> assignStudents(@RequestBody List<Long> lstIdStudent, @PathVariable Long classId) {
     	classService.assignStudentToClass(lstIdStudent, classId);
-    	Map<String, String> response = new HashMap<>();
-    	response.put("strMsg", "Assign to Class successfully");
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(Map.of("strMsg","Assign to Class successfully"));
     } 
 }

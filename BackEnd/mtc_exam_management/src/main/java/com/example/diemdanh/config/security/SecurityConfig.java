@@ -48,6 +48,8 @@ public class SecurityConfig {
 									                    "/swagger-resources/**",
 									                    "/webjars/**").permitAll()
 												.requestMatchers("/v1/admin/**").hasAnyAuthority("ADMIN")
+												.requestMatchers("/v1/admin-principal/**").hasAnyAuthority("ADMIN")
+												.requestMatchers("/v1/admin-principal/**").hasAnyAuthority("PRINCIPAL")
 												.requestMatchers("/v1/user/**").hasAnyAuthority("USER")
 												.requestMatchers("/v1/adminuser/**").hasAnyAuthority("ADMIN", "USER")
 												.requestMatchers("/v1/teacher/**").hasAuthority("TEACHER")

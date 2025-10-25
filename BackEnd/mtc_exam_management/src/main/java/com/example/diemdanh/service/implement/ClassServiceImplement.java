@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.diemdanh.dto.ResponseData;
 import com.example.diemdanh.dto.dtoenum.ClassStatus;
-import com.example.diemdanh.dto.dtoenum.EnumResponseStatus;
 import com.example.diemdanh.dto.mapper.MapperComponentHelper;
 import com.example.diemdanh.dto.request.create.CreateClassRequest;
 import com.example.diemdanh.dto.request.update.UpdateClassRequest;
@@ -45,7 +43,7 @@ public class ClassServiceImplement implements ClassService {
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public ResponseData<ClassResponse> addClass(CreateClassRequest createClassRequest) {
+	public ClassResponse addClass(CreateClassRequest createClassRequest) {
 		ClassResponse classDTOResp = new ClassResponse();
 		// Create class
 		ClassEntity classEntity = common.createClass(createClassRequest);
@@ -60,7 +58,7 @@ public class ClassServiceImplement implements ClassService {
 		// Set response JSON
 		classDTOResp = mapperClassComponent.convertClassToDTO(classEntity);
 
-		return ResponseData.success(classDTOResp);
+		return classDTOResp;
 	}
 
 	// * Get all Class
@@ -69,16 +67,16 @@ public class ClassServiceImplement implements ClassService {
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(readOnly = true)
 	@Override
-	public ResponseData<List<ClassResponse>> getAllClass() {
+	public List<ClassResponse> getAllClass() {
         List<ClassResponse> classes = classRepository.findAll().stream()
                 .map(mapperClassComponent::convertClassToDTO)
                 .collect(Collectors.toList());
         
         if (classes.isEmpty()) {
-            return ResponseData.success(classes);
+            return classes;
         }
         
-        return ResponseData.success(classes);
+        return classes;
 	}
 	
 	// * Update Class
@@ -87,7 +85,7 @@ public class ClassServiceImplement implements ClassService {
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public ResponseData<ClassResponse> updateClass(Long id, UpdateClassRequest updateClassRequest) {
+	public ClassResponse updateClass(Long id, UpdateClassRequest updateClassRequest) {
 		ClassEntity classEntity = classRepository.findById(id).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Class not found")
 			);
@@ -106,7 +104,7 @@ public class ClassServiceImplement implements ClassService {
 		
 		ClassResponse classResponse = mapperClassComponent.convertClassToDTO(classEntity);
 		
-		return ResponseData.success(classResponse);
+		return classResponse;
 	}
 
 	// * Get Class by ID
@@ -115,7 +113,7 @@ public class ClassServiceImplement implements ClassService {
 	// Giang Ngo Truong 17/03/2025
 	@Transactional(readOnly = true)
 	@Override
-	public ResponseData<ClassResponse> getClassById(Long Id) {
+	public ClassResponse getClassById(Long Id) {
 		return classRepository.findById(Id).map(classObject -> {
 			ClassResponse classDTO = new ClassResponse();
 			classDTO.setId(classObject.getId());
@@ -124,9 +122,9 @@ public class ClassServiceImplement implements ClassService {
 			classDTO.setStatus(classObject.getStatus());
 			classDTO.setCreatedAt(classObject.getCreatedAt());
 			classDTO.setUpdatedAt(classObject.getUpdatedAt());
-			return new ResponseData<ClassResponse>(EnumResponseStatus.SUCCESS, "Success", classDTO);
+			return classDTO;
 		}).orElseGet(() -> {
-			return ResponseData.notFound("Class not found");
+			return null;
 		});
 	}
 	
@@ -135,11 +133,11 @@ public class ClassServiceImplement implements ClassService {
 	// Output: ResponseData<ClassResponse>
 	// Giang Ngo Truong 18/09/2025
 	@Override
-	public ResponseData<ClassResponse> deleteClassById(Long id) {
+	public ClassResponse deleteClassById(Long id) {
 		ClassResponse classResponse = new ClassResponse();
 		Optional<ClassEntity> optionClassEntity = classRepository.findById(id);
         if (optionClassEntity.isEmpty()) {
-            return ResponseData.notFound("Class not found");
+            return null;
         }
         
         try {
@@ -148,10 +146,10 @@ public class ClassServiceImplement implements ClassService {
         	classRepository.save(classEntity);
             
             classResponse = mapperClassComponent.convertClassToDTO(classEntity);
-            return ResponseData.success(classResponse);
+            return classResponse;
             
         } catch (Exception e) {
-            return ResponseData.error("Error", classResponse);
+            return classResponse;
         }
 	}
 	

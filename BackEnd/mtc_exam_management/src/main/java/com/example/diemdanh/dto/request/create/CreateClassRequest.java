@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -16,6 +17,7 @@ public class CreateClassRequest {
     @Schema(example = "Class Example")
     private String strClassName;
     
+    @Nullable
     @Size(max = 500, message = "Description must not exceed 500 characters")
     @Schema(example = "Description Example")
     private String strClassDescription;

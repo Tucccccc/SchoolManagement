@@ -10,10 +10,7 @@ import jakarta.validation.constraints.Size;
 public class ClassResponse {
 	private Long id;
 	
-    @NotBlank(message = "Class name is required")
-    @Size(max = 150, message = "Class name must not exceed 150 characters")
 	private String className;
-    @Size(max = 500, message = "Description must not exceed 500 characters")
 	private String classDescription;
 	
 	private ClassStatus status;

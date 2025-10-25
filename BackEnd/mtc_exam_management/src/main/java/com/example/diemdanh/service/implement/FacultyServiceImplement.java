@@ -1,12 +1,14 @@
 package com.example.diemdanh.service.implement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.diemdanh.dto.FacultyDTO;
+import com.example.diemdanh.dto.mapper.MapperComponentHelper;
+import com.example.diemdanh.dto.request.create.CreateFacultyRequest;
+import com.example.diemdanh.dto.response.FacultyResponse;
 import com.example.diemdanh.entity.Faculty;
 import com.example.diemdanh.global.common.CommonMethods;
 import com.example.diemdanh.repository.FacultyRepository;
@@ -14,10 +16,16 @@ import com.example.diemdanh.service.FacultyService;
 
 @Service
 public class FacultyServiceImplement implements FacultyService {
-	@Autowired
-	private FacultyRepository faFacultyRepository;
+	private final FacultyRepository faFacultyRepository;
+	private final MapperComponentHelper mapperFacultyComponent;
 
 	private CommonMethods common = new CommonMethods();
+
+	public FacultyServiceImplement(FacultyRepository faFacultyRepository,
+			MapperComponentHelper mapperFacultyComponent) {
+		this.faFacultyRepository = faFacultyRepository;
+		this.mapperFacultyComponent = mapperFacultyComponent;
+	}
 
 	// * addFaculty
 	// Input: FacultyDTO facultyRequest
@@ -25,8 +33,8 @@ public class FacultyServiceImplement implements FacultyService {
 	// Giang Ngo Truong 24/03/2025
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public FacultyDTO addFaculty(FacultyDTO facultyRequest) {
-		FacultyDTO facultyResp = new FacultyDTO();
+	public FacultyResponse addFaculty(CreateFacultyRequest facultyRequest) {
+		FacultyResponse facultyResp = new FacultyResponse();
 
 		// Create faculty
 		Faculty faculty = common.createFaculty(facultyRequest);
@@ -39,9 +47,7 @@ public class FacultyServiceImplement implements FacultyService {
 		}
 
 		// Set response JSON
-		facultyResp.setFaculty(facultyResult);
-		facultyResp.setIntStatusCode(200);
-		facultyResp.setStrMsg("Faculty save successfully!");
+		facultyResp = mapperFacultyComponent.convertFacultyToDTO(facultyResult);
 
 		return facultyResp;
 	}
@@ -51,24 +57,13 @@ public class FacultyServiceImplement implements FacultyService {
 	// Output: FacultyDTO
 	// Giang Ngo Truong 24/03/2025
 	@Override
-	public FacultyDTO getAllFaculty() {
-		FacultyDTO facultyDTO = new FacultyDTO();
-		try {
-			List<Faculty> lstResult = faFacultyRepository.findAll();
-			if (!lstResult.isEmpty()) {
-				facultyDTO.setLstFaculty(lstResult);
-				facultyDTO.setIntStatusCode(200);
-				facultyDTO.setStrMsg("Success");
-			} else {
-				facultyDTO.setIntStatusCode(404);
-				facultyDTO.setStrMsg("Faculty not found");
-			}
-			return facultyDTO;
-		} catch (Exception e) {
-			facultyDTO.setIntStatusCode(500);
-			facultyDTO.setStrError("An error occurred");
-			return facultyDTO;
+	public List<FacultyResponse> getAllFaculty() {
+		List<FacultyResponse> faculties = faFacultyRepository.findAll().stream()
+				.map(mapperFacultyComponent::convertFacultyToDTO)
+				.collect(Collectors.toList());
+		if (faculties.isEmpty()) {
+			return faculties;
 		}
+		return faculties;
 	}
-
 }

@@ -3,7 +3,6 @@ package com.example.diemdanh.dto;
 import java.time.LocalDateTime;
 
 import com.example.diemdanh.dto.dtoenum.EnumResponseStatus;
-import com.example.diemdanh.dto.response.ClassResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

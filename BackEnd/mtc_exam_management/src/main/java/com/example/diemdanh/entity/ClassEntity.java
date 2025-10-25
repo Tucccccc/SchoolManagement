@@ -28,13 +28,10 @@ public class ClassEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotBlank(message = "Class name is required")
-    @Size(max = 150, message = "Class name must not exceed 150 characters")
+
     @Column(name = "class_name", nullable = false, length = 150)
 	private String className;
 	
-    @Size(max = 500, message = "Description must not exceed 500 characters")
     @Column(name = "description", length = 500)
 	private String classDescription;
     

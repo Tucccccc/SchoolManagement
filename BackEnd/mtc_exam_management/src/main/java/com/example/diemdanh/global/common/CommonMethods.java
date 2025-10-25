@@ -2,13 +2,14 @@ package com.example.diemdanh.global.common;
 
 import java.util.Objects;
 
-import com.example.diemdanh.dto.FacultyDTO;
 import com.example.diemdanh.dto.MultipleChoiceQuestionDTO;
 import com.example.diemdanh.dto.SubjectDTO;
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.dto.dtoenum.ClassStatus;
+import com.example.diemdanh.dto.dtoenum.FacultyStatus;
 import com.example.diemdanh.dto.mapper.DTOToEntity;
 import com.example.diemdanh.dto.request.create.CreateClassRequest;
+import com.example.diemdanh.dto.request.create.CreateFacultyRequest;
 import com.example.diemdanh.entity.ClassEntity;
 import com.example.diemdanh.entity.Faculty;
 import com.example.diemdanh.entity.MultipleChoiceQuestion;
@@ -98,11 +99,11 @@ public class CommonMethods {
 	// Input: FacultyDTO facultyDTO
 	// Output: Faculty faculty
 	// Giang Ngo Truong 24/03/2025
-	public Faculty createFaculty(FacultyDTO facultyDTO) {
+	public Faculty createFaculty(CreateFacultyRequest facultyDTO) {
 		Faculty faculty = new Faculty();
 		faculty.setFacultyName(facultyDTO.getStrFacultyName());
 		faculty.setFalcultyDescription(facultyDTO.getStrFacultyDescription());
-		
+		faculty.setStatus(FacultyStatus.ACTIVE);
 		return faculty;
 	}
 	

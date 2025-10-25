@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diemdanh.dto.LogoutRequest;
-import com.example.diemdanh.dto.RefreshTokenRequest;
 import com.example.diemdanh.dto.ResponseData;
 import com.example.diemdanh.dto.UserDTO;
 import com.example.diemdanh.dto.request.LoginRequest;
+import com.example.diemdanh.dto.request.RefreshTokenRequest;
 import com.example.diemdanh.dto.response.LoginResponse;
 import com.example.diemdanh.service.RefreshTokenService;
 import com.example.diemdanh.service.UserManagementService;
@@ -37,16 +37,15 @@ public class SecurityController {
 
 	@PostMapping("/v1/auth/login")
 	public ResponseEntity<ResponseData<?>> login(@RequestBody LoginRequest req) {
-		
 		LoginResponse loginResponse = userManagementService.login(req);
 		
 		return ResponseEntity.ok(ResponseData.success(loginResponse));
 	}
 	
-//	@PostMapping("/v1/auth/refresh")
-//	public ResponseEntity<TokenResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
-//		return ResponseEntity.ok(userManagementService.refreshToken(request.getRefreshToken()));
-//	}
+	@PostMapping("/v1/auth/refresh")
+	public ResponseEntity<ResponseData<?>> refreshToken(@RequestBody RefreshTokenRequest request) {
+		return ResponseEntity.ok(ResponseData.success(userManagementService.refreshToken(request.getRefreshToken())));
+	}
 	
 	@PostMapping("/v1/auth/logout")
 	public ResponseEntity<?> logout(@RequestBody LogoutRequest request) {

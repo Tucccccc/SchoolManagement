@@ -123,19 +123,12 @@ public class UserManagementServiceImplement implements UserManagementService {
 	// Giang Ngo Truong 20/02/2025
 	@Override
 	public LoginResponse login(LoginRequest loginRequest) {
-		UserDTO userDTORes = new UserDTO();
-
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getStrUserName(),
 					loginRequest.getStrPassword()));
 		var user = userRepository.findByUsername(loginRequest.getStrUserName())
 					.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 		String jwt = jwtUtils.generateToken(user);
 		RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
-		userDTORes.setIntStatusCode(200);
-		userDTORes.setStrToken(jwt);
-		userDTORes.setStrExpirationTime("24Hrs");
-		userDTORes.setStrRole(user.getRole());
-		userDTORes.setStrMsg("Successfully Logged In");
 
 		return new LoginResponse(user.getUsername(), user.getRole(), jwt, refreshToken.getToken());
 	}
@@ -151,7 +144,7 @@ public class UserManagementServiceImplement implements UserManagementService {
         }
 
         String newAccessToken = jwtUtils.generateToken(refreshToken.getUser());
-
+        
         return new LoginResponse(refreshToken.getUser().getUsername(), refreshToken.getUser().getRole(), newAccessToken, refreshToken.getToken());
     }
 
